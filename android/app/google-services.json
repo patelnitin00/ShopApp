@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "363689126890",
+    "firebase_url": "https://reactnative-5b3f4.firebaseio.com",
+    "project_id": "reactnative-5b3f4",
+    "storage_bucket": "reactnative-5b3f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363689126890:android:d1b37a3e2c06141f882093",
+        "android_client_info": {
+          "package_name": "com.shopca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363689126890-s2b08dccut6mota8l3ksqqe9u5jud18o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shopca",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "363689126890-175rodp9k887k7369spe6oblc8c0e6pg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw23x0mNb1vL6V_ejDLQXdaCQjiGclSQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363689126890-175rodp9k887k7369spe6oblc8c0e6pg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
