@@ -6,12 +6,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Colors from '../../utills/Colors';
 import { width, height, totalSize } from 'react-native-dimension';
 
-const Component = ({ title, onBackPress, onPressFilter, showFilter, hideBackIcon }) => {
+const Component = ({ title, onLeftPress, onPressFilter, showFilter, hideBackIcon, showMenu }) => {
   return (<View style={styles.container}>
-    <TouchableOpacity onPress={!hideBackIcon && onBackPress} >
-      <Entypo name={"chevron-left"} color={
-        hideBackIcon ? Colors.primaryPink : Colors.backgroundWhite} size={height(4)} />
-    </TouchableOpacity>
+    {showMenu ?
+      <TouchableOpacity onPress={showMenu && onLeftPress} >
+        <Entypo name={"menu"} color={Colors.backgroundWhite} size={height(4)} />
+      </TouchableOpacity>
+      :
+      <TouchableOpacity onPress={!hideBackIcon && onLeftPress} >
+        <Entypo name={"chevron-left"} color={
+          hideBackIcon ? Colors.primaryPink : Colors.backgroundWhite} size={height(4)} />
+      </TouchableOpacity>
+    }
     <Text style={styles.headText}>{title}</Text>
     <TouchableOpacity onPress={showFilter && onPressFilter}>
       <MaterialCommunityIcons name={"filter-outline"}
