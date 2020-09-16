@@ -36,6 +36,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: height(1)
   },
+  productContainerAll: {
+    height: height(23),
+    width: width(32),
+    backgroundColor: Colors.backgroundWhite,
+    borderRadius: width(2),
+    elevation: 7,
+    borderWidth: 0.5,
+    borderColor: Colors.primaryPink,
+    shadowColor: Colors.primaryBlue,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    padding: 3,
+    marginTop: 2,
+    marginBottom: 25,
+    marginLeft: width(1),
+    alignItems: 'center',
+    paddingHorizontal: width(1),
+    justifyContent: 'space-between',
+    paddingTop: height(1)
+  },
   productImage: {
     height: height(12.5),
     marginBottom: height(1)
