@@ -77,6 +77,10 @@ const styles = StyleSheet.create({
   },
   priceText: {
     color: Colors.blue
+  },
+  loaderContainer: {
+    width: width(100),
+    alignItems: 'center'
   }
 });
 export default styles;
