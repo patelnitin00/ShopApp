@@ -2,24 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, ActivityIndicator } from 'react-native';
 import styles from './Dashboard.styles';
 import Button from '../../components/Button/Button.component';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../Redux/Actions/Auth';
 import Colors from '../../utills/Colors'
 import Header from '../../components/HeaderBasic/HeaderBasic.component'
-import data from '../../DummyData/Products'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import SearchBar from '../../components/SearchBar/SearchBar.component'
 import firestore from '@react-native-firebase/firestore';
-import moment from 'moment'
+import FilterModal from '../../components/FilterModal/FilterModal.Component'
 export default function Dashboard(props) {
-  const user = useSelector(state => state.Auth.user);
-  const dispatch = useDispatch();
   const [allProducts, setAllProducts] = useState([]);
   const [newProdutcs, setNewProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
-  // const products = data.allProducts;
-
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
   useEffect(() => {
     getProducts()
   }, [])
@@ -95,13 +89,49 @@ export default function Dashboard(props) {
       <ActivityIndicator color={Colors.primaryPink} size={"large"} />
     </View>
   )
+  const toggleFilter = () => setIsFilterVisible(!isFilterVisible);
+  const applyFilter = (sortBy) => {
+    if (sortBy == "byPrice") {
+      setAllProducts(allProducts.sort((a, b) => b.price - a.price))
+      setPopularProducts(popularProducts.sort((a, b) => b.price - a.price))
+      setNewProducts(newProdutcs.sort((a, b) => b.price - a.price))
+    }
+    else if (sortBy == "byName") {
+      setAllProducts(allProducts.sort(function (a, b) {
+        var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+        if (nameA < nameB) //sort string ascending
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0; //default return value (no sorting)
+      }))
+      setPopularProducts(popularProducts.sort(function (a, b) {
+        var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+        if (nameA < nameB) //sort string ascending
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0; //default return value (no sorting)
+      }))
+      setNewProducts(newProdutcs.sort(function (a, b) {
+        var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+        if (nameA < nameB) //sort string ascending
+          return -1;
+        if (nameA > nameB)
+          return 1;
+        return 0; //default return value (no sorting)
+      }))
+    }
+    toggleFilter()
+  }
   return (
     <>
       <SafeAreaView backgroundColor={Colors.darkPink} />
       <StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Header title="Shop Now" showMenu showFilter onPressFilter={() => { }} onLeftPress={() => { }} />
+          <Header title="Shop Now" showMenu showFilter onPressFilter={toggleFilter}
+            onLeftPress={() => { props.navigation.openDrawer() }} />
           <SearchBar value={searchValue} onChangeText={search} />
           <ScrollView showsVerticalScrollIndicator={true}>
             <View style={styles.categoryContainer}>
@@ -129,8 +159,8 @@ export default function Dashboard(props) {
               numColumns={3}
               ListEmptyComponent={renderEmptyListComponent}
             />
-            <Button title="Logout" onPress={() => dispatch(logout())} />
           </ScrollView>
+          <FilterModal isVisible={isFilterVisible} onRequestClose={toggleFilter} onPressApply={applyFilter} />
         </View>
       </SafeAreaView>
     </>

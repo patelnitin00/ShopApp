@@ -81,6 +81,6 @@ const styles = StyleSheet.create({
   loaderContainer: {
     width: width(100),
     alignItems: 'center'
-  }
+  },
 });
 export default styles;

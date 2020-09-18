@@ -4,12 +4,11 @@ import { width, height, totalSize } from 'react-native-dimension';
 const styles = StyleSheet.create({
   container: {
     height: height(6),
-    width: '90%',
+    width: '75%',
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: Colors.primaryPink,
     borderWidth: 1,
-    alignSelf: 'center',
     marginTop: 12
   },
   input: {
