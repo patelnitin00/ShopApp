@@ -18,12 +18,12 @@ export default function Dashboard(props) {
   const [newProdutcs, setNewProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
-  const products = data.allProducts;
+  // const products = data.allProducts;
 
   useEffect(() => {
-    fetchProducts()
+    getProducts()
   }, [])
-  const fetchProducts = () => {
+  const getProducts = () => {
     const fetchedProducts = [];
     firestore()
       .collection('Products')
@@ -32,16 +32,17 @@ export default function Dashboard(props) {
         querySnapshot.forEach(documentSnapshot => {
           fetchedProducts.push(documentSnapshot.data());
         });
-        let fetchedPopularProducts = (fetchedProducts.sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
-        let fetchedNewProducts = (fetchedProducts.sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
+        let fetchedPopularProducts = ([...fetchedProducts].sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
+        let fetchedNewProducts = ([...fetchedProducts].sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
         setNewProducts(fetchedNewProducts)
         setPopularProducts(fetchedPopularProducts)
         setAllProducts(fetchedProducts)
+        window.products = [...fetchedProducts]
       });
   }
   const search = (val) => {
     setSearchValue(val)
-    const newData = products.filter(item => {
+    const newData = window.products.filter(item => {
       const itemData = `${item.title.toUpperCase()} ${item.title.toUpperCase()} ${item.title.toUpperCase()} `;
       const textData = val.toUpperCase();
       return itemData.indexOf(textData) > -1;
