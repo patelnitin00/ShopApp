@@ -27,6 +27,7 @@ export default function Login(props) {
       }
       else {
         auth()
+          .signOut()
           .then(() => {
             RNBootSplash.hide({ duration: 500 })
           });

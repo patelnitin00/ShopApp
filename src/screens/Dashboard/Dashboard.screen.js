@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, ActivityIndicator } from 'react-native';
 import styles from './Dashboard.styles';
-import Button from '../../components/Button/Button.component';
+import ItemDetailModal from '../../components/ItemDetailModal/ItemDetailModal.Component'
 import Colors from '../../utills/Colors'
 import Header from '../../components/HeaderBasic/HeaderBasic.component'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
@@ -26,6 +26,7 @@ export default function Dashboard(props) {
         querySnapshot.forEach(documentSnapshot => {
           fetchedProducts.push(documentSnapshot.data());
         });
+        console.log(fetchedProducts)
         let fetchedPopularProducts = ([...fetchedProducts].sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
         let fetchedNewProducts = ([...fetchedProducts].sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
         setNewProducts(fetchedNewProducts)
@@ -161,6 +162,7 @@ export default function Dashboard(props) {
             />
           </ScrollView>
           <FilterModal isVisible={isFilterVisible} onRequestClose={toggleFilter} onPressApply={applyFilter} />
+          {/* <ItemDetailModal /> */}
         </View>
       </SafeAreaView>
     </>

@@ -16,7 +16,23 @@ export default function Login(props) {
   const phone = props.route?.params.phone;
   const [confirmation, setConfirmation] = useState(null);
   const [code, setCode] = useState(null);
+  const onAuthStateChanged = async (data) => {
+    console.log("Auth")
+    if (data != null) {
+      const user = await firestore()
+        .collection('Users')
+        .doc(data.uid)
+        .get();
+      if (user.exists) {
+        dispatch(login(user.data()))
+      }
+      else {
+        props.navigation.navigate("Signup", { uid: data.uid })
+      }
+    }
+  }
   useEffect(() => {
+    const authChangeSubscriber = auth().onAuthStateChanged(onAuthStateChanged);
     auth().signInWithPhoneNumber(phone)
       .then((confirmResult) => {
         setConfirmation(confirmResult);
@@ -26,6 +42,7 @@ export default function Login(props) {
         console.log(error)
         props.navigation.goBack();
       });
+    return authChangeSubscriber;
   }, [])
   const confirmCode = async () => {
     try {

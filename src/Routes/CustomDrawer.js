@@ -16,6 +16,7 @@ export default function CustomDrawerContentComponent(props) {
     const dispatch = useDispatch();
     return (
         <View style={styles.container}>
+            <Text style={styles.userName}>{user.fullName}</Text>
             <DrawerContentScrollView {...props}>
                 <DrawerItemList {...props} />
                 <DrawerItem
@@ -37,5 +38,12 @@ const styles = StyleSheet.create({
     logoutContainer: {
         flexDirection: 'row',
         marginLeft: width(2.5)
+    },
+    userName: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: width(5),
+        marginVertical: height(4),
+        color: Colors.primaryPink
     }
 });
