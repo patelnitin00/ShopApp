@@ -72,11 +72,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   priceLableText: {
-    fontSize: width(3.2),
+    fontSize: width(3),
     fontWeight: 'bold'
   },
   priceText: {
-    color: Colors.blue
+    color: Colors.blue,
+    fontSize: width(3)
   },
   loaderContainer: {
     width: width(100),

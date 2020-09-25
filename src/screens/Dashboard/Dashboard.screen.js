@@ -8,12 +8,19 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import SearchBar from '../../components/SearchBar/SearchBar.component'
 import firestore from '@react-native-firebase/firestore';
 import FilterModal from '../../components/FilterModal/FilterModal.Component'
+import { useDispatch, useSelector } from 'react-redux'
 export default function Dashboard(props) {
+  const myCart = useSelector(state => state.MyCart.myCart)
   const [allProducts, setAllProducts] = useState([]);
   const [newProdutcs, setNewProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
   const [searchValue, setSearchValue] = useState([]);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [isItemDetailVisible, setIsItemDetailVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null)
+  useEffect(() => {
+    console.log(myCart)
+  }, [myCart])
   useEffect(() => {
     getProducts()
   }, [])
@@ -26,7 +33,6 @@ export default function Dashboard(props) {
         querySnapshot.forEach(documentSnapshot => {
           fetchedProducts.push(documentSnapshot.data());
         });
-        console.log(fetchedProducts)
         let fetchedPopularProducts = ([...fetchedProducts].sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
         let fetchedNewProducts = ([...fetchedProducts].sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
         setNewProducts(fetchedNewProducts)
@@ -52,7 +58,7 @@ export default function Dashboard(props) {
   }
   const renderProduct = ({ item, index }) => (
     <TouchableOpacity style={styles.productContainer}
-      onPress={() => { }}>
+      onPress={() => { setSelectedItem(item); setIsItemDetailVisible(!isItemDetailVisible) }}>
       <View>
         <Image source={{ uri: item.image }} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
@@ -70,7 +76,7 @@ export default function Dashboard(props) {
   )
   const renderAllProduct = ({ item, index }) => (
     <TouchableOpacity style={styles.productContainerAll}
-      onPress={() => { }}>
+      onPress={() => { setSelectedItem(item); setIsItemDetailVisible(!isItemDetailVisible) }}>
       <View>
         <Image source={{ uri: item.image }} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
@@ -92,7 +98,13 @@ export default function Dashboard(props) {
   )
   const toggleFilter = () => setIsFilterVisible(!isFilterVisible);
   const applyFilter = (sortBy) => {
+    console.log(sortBy)
     if (sortBy == "byPrice") {
+      setAllProducts(allProducts.sort((a, b) => b.price - a.price))
+      setPopularProducts(popularProducts.sort((a, b) => b.price - a.price))
+      setNewProducts(newProdutcs.sort((a, b) => b.price - a.price))
+    }
+    else if (sortBy == "byCat") {
       setAllProducts(allProducts.sort((a, b) => b.price - a.price))
       setPopularProducts(popularProducts.sort((a, b) => b.price - a.price))
       setNewProducts(newProdutcs.sort((a, b) => b.price - a.price))
@@ -162,7 +174,8 @@ export default function Dashboard(props) {
             />
           </ScrollView>
           <FilterModal isVisible={isFilterVisible} onRequestClose={toggleFilter} onPressApply={applyFilter} />
-          {/* <ItemDetailModal /> */}
+          <ItemDetailModal isVisible={isItemDetailVisible} item={selectedItem}
+            onRequestClose={() => setIsItemDetailVisible(!isItemDetailVisible)} />
         </View>
       </SafeAreaView>
     </>

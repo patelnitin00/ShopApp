@@ -12,7 +12,9 @@ const styles = StyleSheet.create({
     head: {
         fontWeight: 'bold',
         fontSize: width(4),
-        textAlign: 'center'
+        textAlign: 'center',
+        maxWidth: '70%',
+        alignSelf: 'center'
     },
     horizontalLine: {
         width: '100%',
@@ -26,6 +28,21 @@ const styles = StyleSheet.create({
         borderRadius: width(5),
         resizeMode: 'contain',
         alignSelf: 'center'
-    }
+    },
+    dataRow: {
+        flexDirection: 'row',
+        width: '80%',
+        justifyContent: 'space-between',
+        alignSelf: 'center',
+        alignItems: 'center',
+        paddingVertical: height(0.5)
+    },
+    dataHead: {
+        fontWeight: 'bold',
+        fontSize: width(4)
+    },
+    dataVal: {
+        fontSize: width(4.5)
+    },
 });
 export default styles;

@@ -30,8 +30,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     picker: {
-        width: width(30),
+        width: width(50),
         height: height(8),
+    },
+    checkButtonContainer: {
+        paddingRight: width(10)
     }
 });
 export default styles;

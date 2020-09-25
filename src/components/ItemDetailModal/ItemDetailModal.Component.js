@@ -3,26 +3,35 @@ import { View, Text, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './ItemDetailModal.Styles';
 import Button from '../Button/Button.component'
-export default function WrapperComponent({ isVisible, onPressApply, onRequestClose }) {
-    const item = {
-        clicked: 10,
-        createdAt: 1599065650340,
-        image: "https://www.onlinepumpstore.com/home/image/cache/catalog/Products/LFP-228x228.jpg",
-        inStock: 15,
-        price: 10499,
-        title: "LUBI 1 H.P (1PH) LFP Series Sewage Pump LFP-2115"
-    }
-
-    return (<Modal isVisible={true}
+import { useDispatch } from 'react-redux'
+import { addItemToCart } from '../../Redux/Actions/MyCart'
+export default function WrapperComponent({ isVisible, onRequestClose, item }) {
+    const dispatch = useDispatch()
+    return (<Modal isVisible={isVisible}
         onBackButtonPress={onRequestClose}
         onBackdropPress={onRequestClose}>
         <View style={styles.container}>
             <Image
-                source={{ uri: item.image }}
+                source={{ uri: item?.image }}
                 style={styles.image}
             />
-            <Text style={styles.head}>{item.title}</Text>
-            <Button title={"Add to Cart"} onPress={() => onPressApply(sortBy)} />
+            <Text style={styles.head}>{item?.title}</Text>
+            <View style={styles.dataRow}>
+                <Text style={styles.dataHead}>Price</Text>
+                <Text style={styles.dataVal}>{item?.price}</Text>
+            </View>
+            <View style={styles.dataRow}>
+                <Text style={styles.dataHead}>Category</Text>
+                <Text style={styles.dataVal}>{item?.category}</Text>
+            </View>
+            <View style={styles.dataRow}>
+                <Text style={styles.dataHead}>In Stock</Text>
+                <Text style={styles.dataVal}>{item?.inStock}</Text>
+            </View>
+            <Button title={"Add to Cart"} onPress={() => {
+                dispatch(addItemToCart(item))
+                onRequestClose()
+            }} />
         </View>
     </Modal >
     )
