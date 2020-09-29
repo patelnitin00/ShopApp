@@ -93,7 +93,11 @@ export default function Dashboard(props) {
   )
   const renderEmptyListComponent = () => (
     <View style={styles.loaderContainer}>
-      <ActivityIndicator color={Colors.primaryPink} size={"large"} />
+      {searchValue == '' ?
+        <ActivityIndicator color={Colors.primaryPink} size={"large"} />
+        :
+        <Text>No products found with "{searchValue}"</Text>
+      }
     </View>
   )
   const toggleFilter = () => setIsFilterVisible(!isFilterVisible);

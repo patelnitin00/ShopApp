@@ -1,41 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
-import styles from './Signup.styles';
+import styles from './Profile.styles';
 import Button from '../../components/Button/Button.component';
-import RNBootSplash from "react-native-bootsplash";
 import Input from '../../components/FormInput/FormInput.component'
 import Header from '../../components/HeaderBasic/HeaderBasic.component'
-import Logo from '../../components/Logo/Logo.component'
 import Colors from '../../utills/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useDispatch } from 'react-redux'
-import { login } from '../../Redux/Actions/Auth';
+import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore';
 export default function Login(props) {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [address, setAddress] = useState('');
-  const uid = props.route?.params.uid;
-  const phoneNumber = props.route?.params.phone;
-  const dispatch = useDispatch()
-  useEffect(() => {
-    RNBootSplash.hide({ duration: 500 });
-  }, []);
-  const onPressRegister = () => {
+  const user = useSelector(state => state.Auth.user)
+  const [fullName, setFullName] = useState(user.fullName);
+  const [email, setEmail] = useState(user.email);
+  const [city, setCity] = useState(user.city);
+  const [country, setCountry] = useState(user.country);
+  const [address, setAddress] = useState(user.address);
+  const onPressSave = () => {
     if (fullName.trim() != '' && email.trim() != ''
       && city.trim() != '' && country.trim() != '' && address.trim() != ''
     ) {
       if (ValidateEmail(email)) {
-        const userData = { email, fullName, uid, phoneNumber, country, city, address }
+        const userData = { email, fullName, country, city, address }
         firestore()
           .collection('Users')
-          .doc(uid)
-          .set(userData)
+          .doc(user.uid)
+          .update(userData)
           .then(() => {
-            console.log('User added!');
-            dispatch(login(userData))
+            props.navigation.navigate("Dashboard")
           })
           .catch((err) => {
             Alert.alert(err.message)
@@ -60,12 +51,13 @@ export default function Login(props) {
       <StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Header title="Authentication" hideBackIcon />
+          <Header title="Authentication" hideBackIcon showMenu
+            onLeftPress={() => props.navigation.openDrawer()} />
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.body}>
               {/* <Logo /> */}
               <Text style={styles.enterText}>
-                Register your Profile
+                Edit Profile
             </Text>
               <View style={styles.inputsContainer}>
                 <Input
@@ -95,8 +87,8 @@ export default function Login(props) {
                 />
               </View>
               <Button
-                title="Register"
-                onPress={onPressRegister}
+                title="Save"
+                onPress={onPressSave}
                 containerStyle={styles.buttonContainer} />
             </View>
           </KeyboardAwareScrollView>

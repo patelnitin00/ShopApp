@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather'
 import CustomDrawer from './CustomDrawer';
 import MyCartScreen from '../screens/MyCart/MyCart.screen';
+import Profile from '../screens/Profile/Profile.screen';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 class Routes extends Component {
@@ -36,6 +37,11 @@ class Routes extends Component {
                         <Drawer.Screen name="Dashboard" component={Dashboard}
                             options={{
                                 drawerIcon: (({ focused, color, size }) => (<Feather name="home" color={color} size={size} />))
+                            }}
+                        />
+                        <Drawer.Screen name="Profile" component={Profile}
+                            options={{
+                                drawerIcon: (({ focused, color, size }) => (<Feather name="user" color={color} size={size} />))
                             }}
                         />
                         <Drawer.Screen name="My Cart" component={MyCartScreen}

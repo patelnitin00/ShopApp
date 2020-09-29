@@ -27,7 +27,7 @@ export default function Login(props) {
         dispatch(login(user.data()))
       }
       else {
-        props.navigation.navigate("Signup", { uid: data.uid })
+        props.navigation.navigate("Signup", { uid: data.uid, phone })
       }
     }
   }
