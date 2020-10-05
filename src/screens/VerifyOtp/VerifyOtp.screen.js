@@ -17,7 +17,6 @@ export default function Login(props) {
   const [confirmation, setConfirmation] = useState(null);
   const [code, setCode] = useState(null);
   const onAuthStateChanged = async (data) => {
-    console.log("Auth")
     if (data != null) {
       const user = await firestore()
         .collection('Users')

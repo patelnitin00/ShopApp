@@ -58,6 +58,7 @@ export default function MyCartScreen(props) {
             )}
           />
           <Button
+            onPress={() => props.navigation.navigate("Checkout")}
             disabled={myCart.length < 1}
             title="CheckOut"
             containerStyle={styles.buttonContainer} />

@@ -10,7 +10,6 @@ import firestore from '@react-native-firebase/firestore';
 import FilterModal from '../../components/FilterModal/FilterModal.Component'
 import { useDispatch, useSelector } from 'react-redux'
 export default function Dashboard(props) {
-  const myCart = useSelector(state => state.MyCart.myCart)
   const [allProducts, setAllProducts] = useState([]);
   const [newProdutcs, setNewProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
@@ -18,9 +17,6 @@ export default function Dashboard(props) {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [isItemDetailVisible, setIsItemDetailVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null)
-  useEffect(() => {
-    console.log(myCart)
-  }, [myCart])
   useEffect(() => {
     getProducts()
   }, [])
@@ -102,7 +98,6 @@ export default function Dashboard(props) {
   )
   const toggleFilter = () => setIsFilterVisible(!isFilterVisible);
   const applyFilter = (sortBy) => {
-    console.log(sortBy)
     if (sortBy == "byPrice") {
       setAllProducts(allProducts.sort((a, b) => b.price - a.price))
       setPopularProducts(popularProducts.sort((a, b) => b.price - a.price))

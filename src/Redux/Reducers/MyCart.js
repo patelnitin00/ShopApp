@@ -1,6 +1,6 @@
 import {
     ADDITEMTOCART, REMOVEFROMCART,
-    DECREMENTQTY, INCREMENTQTY
+    DECREMENTQTY, INCREMENTQTY, EMPTYCART
 } from '../Types';
 const intialState = {
     myCart: []
@@ -46,6 +46,12 @@ const reducer = (state = intialState, action) => {
             return {
                 ...state,
                 myCart: newMyCart
+            }
+        }
+        case EMPTYCART: {
+            return {
+                ...state,
+                myCart: []
             }
         }
         default:

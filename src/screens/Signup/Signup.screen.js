@@ -34,7 +34,6 @@ export default function Login(props) {
           .doc(uid)
           .set(userData)
           .then(() => {
-            console.log('User added!');
             dispatch(login(userData))
           })
           .catch((err) => {

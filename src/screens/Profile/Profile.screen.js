@@ -51,14 +51,11 @@ export default function Login(props) {
       <StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Header title="Authentication" hideBackIcon showMenu
+          <Header title="My Profile" hideBackIcon showMenu
             onLeftPress={() => props.navigation.openDrawer()} />
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.body}>
               {/* <Logo /> */}
-              <Text style={styles.enterText}>
-                Edit Profile
-            </Text>
               <View style={styles.inputsContainer}>
                 <Input
                   containerStyle={styles.inputContainer}
@@ -86,11 +83,11 @@ export default function Login(props) {
                   title={"Enter Complete Address"} inputStyle={styles.input}
                 />
               </View>
-              <Button
-                title="Save"
-                onPress={onPressSave}
-                containerStyle={styles.buttonContainer} />
             </View>
+            <Button
+              title="Save"
+              onPress={onPressSave}
+              containerStyle={styles.buttonContainer} />
           </KeyboardAwareScrollView>
         </View>
       </SafeAreaView>

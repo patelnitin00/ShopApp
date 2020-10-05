@@ -1,6 +1,7 @@
 import {
     ADDITEMTOCART, REMOVEFROMCART,
-    INCREMENTQTY, DECREMENTQTY
+    INCREMENTQTY, DECREMENTQTY,
+    EMPTYCART
 } from '../Types';
 export const addItemToCart = payload => {
     return {
@@ -24,5 +25,10 @@ export const decrementQty = (payload) => {
     return {
         type: DECREMENTQTY,
         payload
+    }
+};
+export const emptyCart = () => {
+    return {
+        type: EMPTYCART,
     }
 };
