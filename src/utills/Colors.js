@@ -7,6 +7,7 @@ const Colors = {
   black: "#000000",
   blue: "#2E86C1",
   lightGray: "#D7DBDD",
-  darkGray: 'gray'
+  darkGray: 'gray',
+  opacitivePink: '#F7D0DF'
 };
 export default Colors;

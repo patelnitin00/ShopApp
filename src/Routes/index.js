@@ -9,8 +9,10 @@ import Dashboard from '../screens/Dashboard/Dashboard.screen';
 import Colors from '../utills/Colors'
 import { connect } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import CustomDrawer from './CustomDrawer';
 import MyCartScreen from '../screens/MyCart/MyCart.screen';
+import MyWishlist from '../screens/MyWishlist/MyWishlist.screen';
 import Checkout from '../screens/Checkout/Checkout.screen';
 import Profile from '../screens/Profile/Profile.screen';
 import MyOrders from '../screens/MyOrders/MyOrders.screen';
@@ -43,7 +45,7 @@ class Routes extends Component {
                         />
                         <Drawer.Screen name="My Cart"
                             options={{
-                                drawerIcon: (({ focused, color, size }) => (<Feather name="home" color={color} size={size} />))
+                                drawerIcon: (({ focused, color, size }) => (<AntDesign name="shoppingcart" color={color} size={size} />))
                             }}
                         >
                             {() => (
@@ -52,6 +54,11 @@ class Routes extends Component {
                                     <Stack.Screen name="Checkout" component={Checkout} />
                                 </Stack.Navigator>)}
                         </Drawer.Screen>
+                        <Drawer.Screen name="My Wishlist" component={MyWishlist}
+                            options={{
+                                drawerIcon: (({ focused, color, size }) => (<Feather name="heart" color={color} size={size} />))
+                            }}
+                        />
                         <Drawer.Screen name="My Orders" component={MyOrders}
                             options={{
                                 drawerIcon: (({ focused, color, size }) => (<Feather name="list" color={color} size={size} />))

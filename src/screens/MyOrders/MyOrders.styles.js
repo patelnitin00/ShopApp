@@ -31,7 +31,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: width(3),
     backgroundColor: Colors.backgroundWhite,
     borderRadius: width(3),
-    marginTop: height(2)
+    marginTop: height(2),
+    borderWidth: 1,
+    borderColor: Colors.primaryYellow
   },
   headingText: {
     fontSize: width(4),
@@ -57,5 +59,18 @@ const styles = StyleSheet.create({
     fontSize: width(3.2),
     width: '70%'
   },
+  productContainer: {
+    flexDirection: 'row',
+    width: '95%',
+    marginTop: width(1),
+    alignItems: 'flex-start'
+  },
+  productImage: {
+    width: width(15),
+    height: width(15),
+    borderColor: Colors.primaryPink,
+    borderWidth: 1,
+    borderRadius: width(2)
+  }
 });
 export default styles;

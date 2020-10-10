@@ -5,7 +5,8 @@ import styles from './ItemDetailModal.Styles';
 import Button from '../Button/Button.component'
 import { useDispatch } from 'react-redux'
 import { addItemToCart } from '../../Redux/Actions/MyCart'
-export default function WrapperComponent({ isVisible, onRequestClose, item }) {
+import { addItemToWishList } from '../../Redux/Actions/WishList'
+export default function WrapperComponent({ isVisible, onRequestClose, item, hideWishListButton }) {
     const dispatch = useDispatch()
     return (<Modal isVisible={isVisible}
         onBackButtonPress={onRequestClose}
@@ -32,6 +33,14 @@ export default function WrapperComponent({ isVisible, onRequestClose, item }) {
                 dispatch(addItemToCart(item))
                 onRequestClose()
             }} />
+            {!hideWishListButton &&
+                <>
+                    <Button title={"Add to Wishlist"} onPress={() => {
+                        dispatch(addItemToWishList(item))
+                        onRequestClose()
+                    }} />
+                    <Text style={styles.comparisonText}>Product Comparison is available in wishlist.</Text>
+                </>}
         </View>
     </Modal >
     )

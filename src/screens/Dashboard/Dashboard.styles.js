@@ -83,5 +83,19 @@ const styles = StyleSheet.create({
     width: width(100),
     alignItems: 'center'
   },
+  rateContainer: {
+    position: 'absolute',
+    borderColor: Colors.darkGray,
+    borderWidth: 1,
+    backgroundColor: Colors.backgroundWhite,
+    borderRadius: width(3),
+    paddingHorizontal: width(1),
+    flexDirection: 'row'
+  },
+  ratingText: {
+    color: Colors.darkGray,
+    fontSize: width(3),
+    marginRight: width(1)
+  }
 });
 export default styles;

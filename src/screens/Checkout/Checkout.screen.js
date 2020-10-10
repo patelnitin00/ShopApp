@@ -44,7 +44,7 @@ export default function MyCartScreen(props) {
           user: { ...user },
           totalBillPayed: totalAmount,
           timeStamp: moment().valueOf(),
-          orderStatus: 'Placed',
+          orderStatus: 'In Process',
           orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
           userId: user.uid,
           items

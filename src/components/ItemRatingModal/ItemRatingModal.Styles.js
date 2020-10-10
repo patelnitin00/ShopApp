@@ -16,12 +16,6 @@ const styles = StyleSheet.create({
         maxWidth: '70%',
         alignSelf: 'center'
     },
-    horizontalLine: {
-        width: '100%',
-        height: 0.5,
-        backgroundColor: Colors.black,
-        marginBottom: height(1)
-    },
     image: {
         width: width(60),
         height: height(20),
@@ -29,24 +23,12 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         alignSelf: 'center'
     },
-    dataRow: {
-        flexDirection: 'row',
-        width: '80%',
-        justifyContent: 'space-between',
-        alignSelf: 'center',
-        alignItems: 'center',
-        paddingVertical: height(0.5)
-    },
     dataHead: {
         fontWeight: 'bold',
-        fontSize: width(4)
+        fontSize: width(4.5),
+        alignSelf: 'center',
+        color: Colors.primaryYellow,
+        marginVertical: height(2)
     },
-    dataVal: {
-        fontSize: width(4.5)
-    },
-    comparisonText: {
-        fontSize: width(3),
-        alignSelf: 'center'
-    }
 });
 export default styles;

@@ -8,7 +8,8 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import SearchBar from '../../components/SearchBar/SearchBar.component'
 import firestore from '@react-native-firebase/firestore';
 import FilterModal from '../../components/FilterModal/FilterModal.Component'
-import { useDispatch, useSelector } from 'react-redux'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { height } from 'react-native-dimension';
 export default function Dashboard(props) {
   const [allProducts, setAllProducts] = useState([]);
   const [newProdutcs, setNewProducts] = useState([]);
@@ -28,6 +29,8 @@ export default function Dashboard(props) {
       .then(querySnapshot => {
         querySnapshot.forEach(documentSnapshot => {
           fetchedProducts.push(documentSnapshot.data());
+          if (documentSnapshot.data().specialOffer.discount != null)
+            console.log(documentSnapshot.data())
         });
         let fetchedPopularProducts = ([...fetchedProducts].sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
         let fetchedNewProducts = ([...fetchedProducts].sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
@@ -52,30 +55,39 @@ export default function Dashboard(props) {
     setAllProducts(newData)
     // }
   }
-  const renderProduct = ({ item, index }) => (
-    <TouchableOpacity style={styles.productContainer}
-      onPress={() => { setSelectedItem(item); setIsItemDetailVisible(!isItemDetailVisible) }}>
-      <View>
-        <Image source={{ uri: item.image }} style={styles.productImage} />
-        <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
-      </View>
-      <View style={styles.priceConainer}>
-        <Text style={styles.priceLableText}>Price:</Text>
-        <Text style={styles.priceText}>{item.price}</Text>
-      </View>
-      <View style={styles.priceConainer}>
-        <Text style={styles.priceLableText}>In Stock:</Text>
-        {/* <Text style={styles.priceText}>{moment(item.createdAt).format("DD-MM-YY")}</Text> */}
-        <Text style={styles.priceText}>{item.inStock}</Text>
-      </View>
-    </TouchableOpacity>
-  )
+  const renderProduct = ({ item, index }) => {
+    return (
+      <TouchableOpacity style={styles.productContainer}
+        onPress={() => { setSelectedItem(item); setIsItemDetailVisible(!isItemDetailVisible) }}>
+        <View>
+          <Image source={{ uri: item.image }} style={styles.productImage} />
+          <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
+          {item.rating && <View style={styles.rateContainer}>
+            <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
+            <Ionicons name="ios-star" color={Colors.primaryYellow} size={height(2)} />
+          </View>}
+        </View>
+        <View style={styles.priceConainer}>
+          <Text style={styles.priceLableText}>Price:</Text>
+          <Text style={styles.priceText}>{item.price}</Text>
+        </View>
+        <View style={styles.priceConainer}>
+          <Text style={styles.priceLableText}>In Stock:</Text>
+          <Text style={styles.priceText}>{item.inStock}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
   const renderAllProduct = ({ item, index }) => (
     <TouchableOpacity style={styles.productContainerAll}
       onPress={() => { setSelectedItem(item); setIsItemDetailVisible(!isItemDetailVisible) }}>
       <View>
         <Image source={{ uri: item.image }} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
+        {item.rating && <View style={styles.rateContainer}>
+          <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
+          <Ionicons name="ios-star" color={Colors.primaryYellow} size={height(2)} />
+        </View>}
       </View>
       <View style={styles.priceConainer}>
         <Text style={styles.priceLableText}>Price:</Text>
