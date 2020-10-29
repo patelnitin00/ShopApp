@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: width(3.5)
   },
+  bulk: {
+    fontSize: width(2.3)
+  },
   inStock: {
     fontSize: width(3.5)
   },

@@ -16,62 +16,79 @@ import MyWishlist from '../screens/MyWishlist/MyWishlist.screen';
 import Checkout from '../screens/Checkout/Checkout.screen';
 import Profile from '../screens/Profile/Profile.screen';
 import MyOrders from '../screens/MyOrders/MyOrders.screen';
+import AboutUs from '../screens/About/About.screen';
+import ProductComparison from '../screens/ProductComparison/ProductComparison.screen';
+import Loading from '../components/LoadingModal/LoadingModal'
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 class Routes extends Component {
     render() {
         return (
-            <NavigationContainer>
-                {!this.props.isLogin ?
-                    <Stack.Navigator initialRouteName="Login" headerMode="none">
-                        <Stack.Screen name="Login" component={Login} />
-                        <Stack.Screen name="VerifyOtp" component={VerifyOtp} />
-                        <Stack.Screen name="Signup" component={Signup} />
-                    </Stack.Navigator>
-                    :
-                    <Drawer.Navigator initialRouteName="App"
-                        drawerType={"slide"}
-                        drawerContent={(props) => <CustomDrawer {...props} />}
-                        overlayColor={'transparent'}
-                        // drawerStyle={{ height: '80%' }}
-                        drawerContentOptions={{
-                            activeTintColor: Colors.primaryPink
-                        }
-                        }>
-                        <Drawer.Screen name="Home" component={Dashboard}
-                            options={{
-                                drawerIcon: (({ focused, color, size }) => (<Feather name="home" color={color} size={size} />))
-                            }}
-                        />
-                        <Drawer.Screen name="My Cart"
-                            options={{
-                                drawerIcon: (({ focused, color, size }) => (<AntDesign name="shoppingcart" color={color} size={size} />))
-                            }}
-                        >
-                            {() => (
-                                <Stack.Navigator initialRouteName="My Cart" headerMode="none">
-                                    <Stack.Screen name="My Cart" component={MyCartScreen} />
-                                    <Stack.Screen name="Checkout" component={Checkout} />
-                                </Stack.Navigator>)}
-                        </Drawer.Screen>
-                        <Drawer.Screen name="My Wishlist" component={MyWishlist}
-                            options={{
-                                drawerIcon: (({ focused, color, size }) => (<Feather name="heart" color={color} size={size} />))
-                            }}
-                        />
-                        <Drawer.Screen name="My Orders" component={MyOrders}
-                            options={{
-                                drawerIcon: (({ focused, color, size }) => (<Feather name="list" color={color} size={size} />))
-                            }}
-                        />
-                        <Drawer.Screen name="Profile" component={Profile}
-                            options={{
-                                drawerIcon: (({ focused, color, size }) => (<Feather name="user" color={color} size={size} />))
-                            }}
-                        />
-                    </Drawer.Navigator>
-                }
-            </NavigationContainer>
+            <>
+                <NavigationContainer>
+                    {!this.props.isLogin ?
+                        <Stack.Navigator initialRouteName="Login" headerMode="none">
+                            <Stack.Screen name="Login" component={Login} />
+                            <Stack.Screen name="VerifyOtp" component={VerifyOtp} />
+                            <Stack.Screen name="Signup" component={Signup} />
+                        </Stack.Navigator>
+                        :
+                        <Drawer.Navigator initialRouteName="App"
+                            drawerType={"slide"}
+                            drawerContent={(props) => <CustomDrawer {...props} />}
+                            overlayColor={'transparent'}
+                            // drawerStyle={{ height: '80%' }}
+                            drawerContentOptions={{
+                                activeTintColor: Colors.primaryPink
+                            }
+                            }>
+                            <Drawer.Screen name="Home" component={Dashboard}
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<Feather name="home" color={color} size={size} />))
+                                }}
+                            />
+                            <Drawer.Screen name="My Cart"
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<AntDesign name="shoppingcart" color={color} size={size} />))
+                                }}
+                            >
+                                {() => (
+                                    <Stack.Navigator initialRouteName="My Cart" headerMode="none">
+                                        <Stack.Screen name="My Cart" component={MyCartScreen} />
+                                        <Stack.Screen name="Checkout" component={Checkout} />
+                                    </Stack.Navigator>)}
+                            </Drawer.Screen>
+                            <Drawer.Screen name="My Wishlist"
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<Feather name="heart" color={color} size={size} />))
+                                }}
+                            >
+                                {() => (
+                                    <Stack.Navigator initialRouteName="My Wishlist" headerMode="none">
+                                        <Stack.Screen name="My Wishlist" component={MyWishlist} />
+                                        <Stack.Screen name="ProductComparison" component={ProductComparison} />
+                                    </Stack.Navigator>)}
+                            </Drawer.Screen>
+                            <Drawer.Screen name="My Orders" component={MyOrders}
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<Feather name="list" color={color} size={size} />))
+                                }}
+                            />
+                            <Drawer.Screen name="Profile" component={Profile}
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<Feather name="user" color={color} size={size} />))
+                                }}
+                            />
+                            <Drawer.Screen name="About Us" component={AboutUs}
+                                options={{
+                                    drawerIcon: (({ focused, color, size }) => (<Feather name="info" color={color} size={size} />))
+                                }}
+                            />
+                        </Drawer.Navigator>
+                    }
+                </NavigationContainer>
+                <Loading />
+            </>
         )
     }
 }

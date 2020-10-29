@@ -19,7 +19,7 @@ export default function WrapperComponent({ isVisible, onRequestClose, item, hide
             <Text style={styles.head}>{item?.title}</Text>
             <View style={styles.dataRow}>
                 <Text style={styles.dataHead}>Price</Text>
-                <Text style={styles.dataVal}>{item?.price}</Text>
+                <Text style={styles.dataVal}>{item?.price.toFixed(0)}</Text>
             </View>
             <View style={styles.dataRow}>
                 <Text style={styles.dataHead}>Category</Text>

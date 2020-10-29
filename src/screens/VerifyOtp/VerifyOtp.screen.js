@@ -11,6 +11,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { setLoading } from '../../Redux/Actions/Main';
 export default function Login(props) {
   const dispatch = useDispatch()
   const phone = props.route?.params.phone;
@@ -44,6 +45,7 @@ export default function Login(props) {
     return authChangeSubscriber;
   }, [])
   const confirmCode = async () => {
+    dispatch(setLoading(true))
     try {
       await confirmation.confirm(code)
         .then(async (data) => {
@@ -52,13 +54,16 @@ export default function Login(props) {
             .doc(data.user.uid)
             .get();
           if (user.exists) {
+            dispatch(setLoading(false))
             dispatch(login(user.data()))
           }
           else {
+            dispatch(setLoading(false))
             props.navigation.navigate("Signup", { uid: data.user.uid })
           }
         })
     } catch (error) {
+      dispatch(setLoading(false))
       Alert.alert("Incorrect verfication code.")
     }
   }

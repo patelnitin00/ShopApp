@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment'
 import { emptyCart } from '../../Redux/Actions/MyCart'
 import firestore from '@react-native-firebase/firestore';
+import { setLoading } from '../../Redux/Actions/Main'
 import stripe from 'tipsi-stripe'
 stripe.setOptions({
   publishableKey: 'pk_test_51HWBj3IWw1tn8IKQnYV866tYHwrdwaLPq06ewQKojgbxXG6xEIVziBpk0v2BldINWfAvID2YfM8EkMvtG5iqw6oM001A9RjKwY',
@@ -33,6 +34,7 @@ export default function MyCartScreen(props) {
     stripe
       .paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
+        dispatch(setLoading(true))
         let items = [];
         myCart.map(item => {
           items.push({
@@ -56,13 +58,16 @@ export default function MyCartScreen(props) {
           .then(() => {
             dispatch(emptyCart())
             props.navigation.goBack()
+            dispatch(setLoading(false))
           })
           .catch((err) => {
             Alert.alert(err.message)
+            dispatch(setLoading(false))
           });
       })
       .catch(error => {
         Alert.alert('Payment failed', { error });
+        dispatch(setLoading(false))
       });
   }
   return (

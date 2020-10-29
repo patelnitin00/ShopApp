@@ -17,13 +17,24 @@ export default function MyCartScreen(props) {
   const [selectedCount, setSelectedCount] = useState(0)
   useEffect(() => {
     setWishList(myWishList)
+    var selectedCountArray = myWishList.filter(item => item.isSelected)
+    setSelectedCount(selectedCountArray.length)
   }, [myWishList])
   const toggleSelection = (index) => {
     var newWishList = [...wishList];
     setSelectedCount(newWishList[index].isSelected ? selectedCount - 1 : selectedCount + 1)
     newWishList[index].isSelected = newWishList[index].isSelected ? false : true;
-    setWishList(newWishList)
     var selectedCountArray = newWishList.filter(item => item.isSelected)
+    if (selectedCountArray.length > 2) {
+      for (var i = 0; i < newWishList.length; i++) {
+        if (newWishList[i].isSelected && i != index) {
+          newWishList[i].isSelected = false
+          break;
+        }
+      }
+      selectedCountArray = newWishList.filter(item => item.isSelected)
+    }
+    setWishList(newWishList)
     setSelectedCount(selectedCountArray.length)
   }
   const renderItem = ({ item, index }) => {
@@ -63,7 +74,10 @@ export default function MyCartScreen(props) {
             )}
           />
           <Button
-            onPress={() => props.navigation.navigate("Checkout")}
+            onPress={() => {
+              var selectedArray = wishList.filter(item => item.isSelected)
+              props.navigation.navigate("ProductComparison",{items: selectedArray})
+            }}
             disabled={selectedCount != 2}
             title="Compare"
             containerStyle={styles.buttonContainer} />

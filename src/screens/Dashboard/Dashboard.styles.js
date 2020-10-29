@@ -92,10 +92,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: width(1),
     flexDirection: 'row'
   },
+  bestContainer: {
+    position: 'absolute',
+    paddingHorizontal: width(1),
+    right: 0
+  },
   ratingText: {
     color: Colors.darkGray,
     fontSize: width(3),
     marginRight: width(1)
+  },
+  specialOfferContainer: {
+    position: 'absolute',
+    borderColor: Colors.darkGray,
+    borderWidth: 1,
+    backgroundColor: Colors.primaryYellow,
+    borderRadius: width(3),
+    paddingHorizontal: width(1),
+    flexDirection: 'row',
+    top: height(10),
+    right: 0,
+    // transform: [{ rotate: '315deg' }]
+  },
+  specialOfferText: {
+    color: Colors.backgroundWhite,
+    fontSize: width(3),
+    marginRight: width(1)
+  },
+  searchRow: {
+    flexDirection: 'row',
+    width: width(100),
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  dropDownContainer: {
+    width: '25%',
+    alignItems: 'center',
+    backgroundColor: Colors.lightGray,
+    height: height(6),
+    marginTop: 12,
+    justifyContent: 'center'
+  },
+  selectedCategoryText: {
+    fontSize: width(3),
+    width: width(16),
+  },
+  categoryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: width(2),
+    alignItems: 'center'
   }
 });
 export default styles;

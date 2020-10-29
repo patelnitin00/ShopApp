@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import {
   View, SafeAreaView, StatusBar, FlatList, Text,
   Image
@@ -11,12 +11,19 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQty, decrementQty } from '../../Redux/Actions/MyCart';
 import { height } from 'react-native-dimension';
+import moment from 'moment'
 export default function MyCartScreen(props) {
   const dispatch = useDispatch()
   const myCart = useSelector(state => state.MyCart.myCart)
-  useEffect(() => {
-  }, [])
   const renderItem = ({ item, index }) => {
+    let price = item.price
+    let specialOfferWithMinOrder = item.specialOffer.minOrder != null && item.specialOffer.discount != null && moment().isBetween(item.specialOffer.from, item.specialOffer.to);
+    if (specialOfferWithMinOrder && (item.quantity >= Number(item.specialOffer.minOrder))) {
+      price = item.price - ((item.specialOffer.discount * price) / 100);
+    }
+    if (item.quantity >= 10) {
+      price = price - ((10 * price) / 100);
+    }
     return (
       <View style={styles.itemMainContainer}>
         <Image
@@ -33,7 +40,10 @@ export default function MyCartScreen(props) {
               <AntDesign name={"plussquare"} color={Colors.primaryPink} size={height(3)}
                 onPress={() => { dispatch(incrementQty(item)) }} />
             </View>
-            <Text style={styles.title}>Price: {(item.quantity * item.price).toFixed(2)}</Text>
+            <View>
+              <Text style={styles.title}>Price: {(item.quantity * price).toFixed(2)}</Text>
+              {item.quantity >= 10 && <Text style={styles.bulk}>Bulk order 10% discount added</Text>}
+            </View>
           </View>
         </View>
       </View>

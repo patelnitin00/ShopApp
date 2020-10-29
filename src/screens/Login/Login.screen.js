@@ -12,6 +12,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { login } from '../../Redux/Actions/Auth';
+import { setLoading } from '../../Redux/Actions/Main';
 export default function Login(props) {
   const dispatch = useDispatch()
   const [phone, setPhone] = useState('+1');
@@ -23,7 +24,9 @@ export default function Login(props) {
         .get();
       if (user.exists) {
         dispatch(login(user.data()))
-        RNBootSplash.hide({ duration: 500 });
+        setTimeout(() =>
+          RNBootSplash.hide({ duration: 500 }), 1000);
+        dispatch(setLoading(false))
       }
       else {
         auth()
@@ -31,9 +34,11 @@ export default function Login(props) {
           .then(() => {
             RNBootSplash.hide({ duration: 500 })
           });
+        dispatch(setLoading(false))
       }
     }
     else {
+      dispatch(setLoading(false))
       RNBootSplash.hide({ duration: 500 });
     }
   }

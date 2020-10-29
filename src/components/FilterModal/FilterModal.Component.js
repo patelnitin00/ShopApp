@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from './FilterModal.Styles';
@@ -12,11 +12,12 @@ export default function WrapperComponent({ isVisible, onPressApply, onRequestClo
         { label: "None", val: "none" },
         { label: "Price", val: "byPrice" },
         { label: "Name", val: "byName" },
-        { label: "Category", val: "byCat" },
     ]
     const [sortBy, setSortBy] = useState("none");
     const [showCategories, setShowCategories] = useState(false);
-
+    useEffect(() => {
+        setSortBy("none")
+    }, [isVisible])
     return (<Modal isVisible={isVisible}
         onBackButtonPress={onRequestClose}
         onBackdropPress={onRequestClose}>
