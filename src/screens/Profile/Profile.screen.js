@@ -26,7 +26,7 @@ export default function Login(props) {
           .doc(user.uid)
           .update(userData)
           .then(() => {
-            props.navigation.navigate("Dashboard")
+            props.navigation.navigate("Home")
           })
           .catch((err) => {
             Alert.alert(err.message)

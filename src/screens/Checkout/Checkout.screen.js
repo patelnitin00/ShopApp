@@ -34,36 +34,42 @@ export default function MyCartScreen(props) {
     stripe
       .paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
-        dispatch(setLoading(true))
-        let items = [];
-        myCart.map(item => {
-          items.push({
-            ...item,
-            totalPrice: item.price * item.quantity,
+        try {
+          dispatch(setLoading(true))
+          let items = [];
+          myCart.map(item => {
+            items.push({
+              ...item,
+              totalPrice: item.price * item.quantity,
+            })
           })
-        })
-        const order = {
-          user: { ...user },
-          totalBillPayed: totalAmount,
-          timeStamp: moment().valueOf(),
-          orderStatus: 'In Process',
-          orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
-          userId: user.uid,
-          items
+          const order = {
+            user: { ...user },
+            totalBillPayed: totalAmount,
+            timeStamp: moment().valueOf(),
+            orderStatus: 'In Process',
+            orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
+            userId: user.uid,
+            items
+          }
+          firestore()
+            .collection('Orders')
+            .doc((stripeTokenInfo.tokenId).toString().replace("tok_", ""))
+            .set(order)
+            .then(() => {
+              dispatch(emptyCart())
+              props.navigation.goBack()
+              dispatch(setLoading(false))
+            })
+            .catch((err) => {
+              Alert.alert(err.message)
+              dispatch(setLoading(false))
+            });
         }
-        firestore()
-          .collection('Orders')
-          .doc((stripeTokenInfo.tokenId).toString().replace("tok_", ""))
-          .set(order)
-          .then(() => {
-            dispatch(emptyCart())
-            props.navigation.goBack()
-            dispatch(setLoading(false))
-          })
-          .catch((err) => {
-            Alert.alert(err.message)
-            dispatch(setLoading(false))
-          });
+        catch (err) {
+          Alert.alert('Payment cancelled', { error });
+          dispatch(setLoading(false))
+        }
       })
       .catch(error => {
         Alert.alert('Payment failed', { error });
