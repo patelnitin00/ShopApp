@@ -31,48 +31,56 @@ export default function MyCartScreen(props) {
     setTotalAmount(newAmount)
   }, [])
   const proceedtoPayment = () => {
+    const options = {
+      requiredBillingAddressFields: 'full',
+      prefilledInformation: {
+        billingAddress: {
+          name: 'Gunilla Haugeh',
+          line1: 'Canary Place',
+          line2: '3',
+          city: 'Macon',
+          state: 'Georgia',
+          country: 'US',
+          postalCode: '31217',
+        },
+      },
+    }
     stripe
-      .paymentRequestWithCardForm()
+      .paymentRequestWithCardForm(options)
       .then(stripeTokenInfo => {
-        try {
-          dispatch(setLoading(true))
-          let items = [];
-          myCart.map(item => {
-            items.push({
-              ...item,
-              totalPrice: item.price * item.quantity,
-            })
+        dispatch(setLoading(true))
+        let items = [];
+        myCart.map(item => {
+          items.push({
+            ...item,
+            totalPrice: item.price * item.quantity,
           })
-          const order = {
-            user: { ...user },
-            totalBillPayed: totalAmount,
-            timeStamp: moment().valueOf(),
-            orderStatus: 'In Process',
-            orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
-            userId: user.uid,
-            items
-          }
-          firestore()
-            .collection('Orders')
-            .doc((stripeTokenInfo.tokenId).toString().replace("tok_", ""))
-            .set(order)
-            .then(() => {
-              dispatch(emptyCart())
-              props.navigation.goBack()
-              dispatch(setLoading(false))
-            })
-            .catch((err) => {
-              Alert.alert(err.message)
-              dispatch(setLoading(false))
-            });
+        })
+        const order = {
+          user: { ...user },
+          totalBillPayed: totalAmount,
+          timeStamp: moment().valueOf(),
+          orderStatus: 'In Process',
+          orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
+          userId: user.uid,
+          items
         }
-        catch (err) {
-          Alert.alert('Payment cancelled', { error });
-          dispatch(setLoading(false))
-        }
+        firestore()
+          .collection('Orders')
+          .doc((stripeTokenInfo.tokenId).toString().replace("tok_", ""))
+          .set(order)
+          .then(() => {
+            dispatch(emptyCart())
+            props.navigation.goBack()
+            dispatch(setLoading(false))
+          })
+          .catch((err) => {
+            Alert.alert(err.message)
+            dispatch(setLoading(false))
+          });
       })
       .catch(error => {
-        Alert.alert('Payment failed', { error });
+        Alert.alert(null, 'Payment cancelled.');
         dispatch(setLoading(false))
       });
   }
