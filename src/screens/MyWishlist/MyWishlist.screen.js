@@ -1,3 +1,7 @@
+/**
+ * @file WishList Screen
+ * @author Chintan Modi
+ */
 import React, { useEffect, useState } from 'react';
 import {
   View, SafeAreaView, StatusBar, FlatList, Text,
@@ -10,6 +14,17 @@ import Header from '../../components/HeaderBasic/HeaderBasic.component'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux';
 import { height } from 'react-native-dimension';
+/**
+ * Wishlist Screen
+ * @module ScreenWishlist
+ */
+
+/**
+ * Wishlist screen
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function MyCartScreen(props) {
   const dispatch = useDispatch()
   const myWishList = useSelector(state => state.Wishlist.wishList)
@@ -37,6 +52,17 @@ export default function MyCartScreen(props) {
     setWishList(newWishList)
     setSelectedCount(selectedCountArray.length)
   }
+         /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.itemMainContainer}>

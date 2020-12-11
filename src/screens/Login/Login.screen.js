@@ -1,3 +1,7 @@
+/**
+ * @file Login Screen
+ * @author Chintan Modi
+ */
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
 import styles from './Login.styles';
@@ -13,6 +17,17 @@ import firestore from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { login } from '../../Redux/Actions/Auth';
 import { setLoading } from '../../Redux/Actions/Main';
+/**
+ * Login Screen
+ * @module ScreenLogin
+ */
+
+/**
+ * Login screen of the app
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function Login(props) {
   const dispatch = useDispatch()
   const [phone, setPhone] = useState('+1');

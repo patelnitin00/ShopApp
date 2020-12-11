@@ -1,3 +1,7 @@
+/**
+ * @file Product Comparision Screen
+ * @author Krutik Parikh & Nitin Patel
+ */
 import React, { useEffect, useState } from 'react';
 import {
   View, SafeAreaView, StatusBar, Image, Text,
@@ -9,10 +13,32 @@ import Header from '../../components/HeaderBasic/HeaderBasic.component'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux';
 import { height } from 'react-native-dimension';
+/**
+ * Product Comparision Screen
+ * @module ScreenProductComparision
+ */
+
+/**
+ * Product Comparision screen
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function MyCartScreen(props) {
   const dispatch = useDispatch()
   const items = props.route.params?.items;
   console.log(items[0])
+   /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
   return (
     <>
       <SafeAreaView backgroundColor={Colors.darkPink} />

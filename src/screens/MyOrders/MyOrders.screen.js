@@ -1,3 +1,7 @@
+/**
+ * @file History(Orders) Screen
+ * @author Chintan Modi
+ */
 import React, { useEffect, useState } from 'react';
 import {
   View, SafeAreaView, StatusBar, FlatList, Text, ActivityIndicator,
@@ -11,6 +15,18 @@ import firestore from '@react-native-firebase/firestore';
 import { width, height, totalSize } from 'react-native-dimension';
 import ItemRatingModal from '../../components/ItemRatingModal/ItemRatingModal.Component'
 import moment from 'moment'
+/**
+ * History(Orders) Screen
+ * @module ScreenHistory
+ */
+
+/**
+ * History screen
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
+
 export default function MyCartScreen(props) {
   const dispatch = useDispatch()
   const user = useSelector(state => state.Auth.user)
@@ -40,6 +56,17 @@ export default function MyCartScreen(props) {
     };
   }
   const renderItem = ({ item, index }) => {
+     /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
     return (
       <View style={styles.itemMainContainer}>
         {/* <Text style={styles.headingText}>{item.orderId}</Text> */}

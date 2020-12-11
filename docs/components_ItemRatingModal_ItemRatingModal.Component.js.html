@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/ItemRatingModal/ItemRatingModal.Component.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/ItemRatingModal/ItemRatingModal.Component.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { View, Text, Image } from 'react-native';
+import Modal from 'react-native-modal';
+import styles from './ItemRatingModal.Styles';
+import { AirbnbRating } from 'react-native-ratings';
+import Button from '../Button/Button.component'
+import { height, width } from 'react-native-dimension';
+import firestore from '@react-native-firebase/firestore';
+/**
+ * @file Item Rating Component
+ * @author Krutik Parikh
+ */
+/**
+ * Item Component Module
+ * @module ComponentItemRating
+ */
+/**
+ * Item
+ * @typedef {Object} Item
+ * @property {number} id - Item ID
+ * @property {String} title - Item Name
+ * @property {string} image - Item Image URL
+ * @property {string} price - Item Price
+ * @property {string} inStock - Item InStock
+ * @property {string} category - Item Category
+ */
+/**
+ * Item Rating component when the order is filled and completed user can click the image and this component will popup
+ * @param {boolean} isVisible - Visibility passed as props 
+ * @param {string} onRequestClose - Function that close the modal on click
+ * @param {Item} Item - Item Object gets from firebase
+ * @returns {JSX.Element}
+ * @function
+ */
+
+export default function WrapperComponent({ isVisible, onRequestClose, item }) {
+    const [rating, setRating] = useState(3)
+    const rateProduct = async () => {
+        await firestore().collection("Orders")
+            .doc(item.orderId).get()
+            .then(async order => {
+                var order = { ...order.data() }
+                var itemIndex = order.items.findIndex(data => data.id == item.id)
+                order.items[itemIndex] = { ...order.items[itemIndex], rated: true }
+                await firestore().collection("Orders")
+                    .doc(item.orderId).update(order).catch(err => {
+                        console.log(err)
+                    });
+            }).catch(err => {
+                console.log(err)
+            })
+        await firestore().collection("Products")
+            .doc(item.id).get()
+            .then(async product => {
+                var newProduct = { ...product.data() }
+                var productPreviousRating = newProduct.rating ? newProduct.rating : 0;
+                var productPreviousCount = newProduct.ratingCount ? newProduct.ratingCount : 0;
+                newProduct.rating = ((productPreviousRating * productPreviousCount) + rating) / (productPreviousCount + 1)
+                newProduct.ratingCount = productPreviousCount + 1;
+                await firestore().collection("Products")
+                    .doc(item.id).update(newProduct).catch(err => {
+                        console.log(err)
+                    });
+            }).catch(err => {
+                console.log(err)
+            })
+        onRequestClose()
+    }
+    return (&lt;Modal isVisible={isVisible}
+        onBackButtonPress={onRequestClose}
+        onBackdropPress={onRequestClose}>
+        &lt;View style={styles.container}>
+            &lt;Image
+                source={{ uri: item?.image }}
+                style={styles.image}
+            />
+            &lt;Text style={styles.head}>{item?.title}&lt;/Text>
+            &lt;Text style={styles.dataHead}>Rate your experience&lt;/Text>
+            &lt;AirbnbRating
+                count={5}
+                reviews={["Very Bad", "Bad", "Average", "Good", "Amazing"]}
+                defaultRating={3}
+                size={width(8)}
+                onFinishRating={(rating) => { setRating(rating) }}
+            />
+            &lt;Button title={"Send Feedback"}
+                containerStyle={{ marginTop: height(3) }}
+                onPress={rateProduct} />
+        &lt;/View>
+    &lt;/Modal >
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">JSDoc Example</a></h2><h3>Modules</h3><ul><li><a href="module-ComponentAlert.html">ComponentAlert</a></li><li><a href="module-ComponentButton.html">ComponentButton</a></li><li><a href="module-ComponentCustomModal.html">ComponentCustomModal</a></li><li><a href="module-ComponentFilterModal.html">ComponentFilterModal</a></li><li><a href="module-ComponentForm.html">ComponentForm</a></li><li><a href="module-ComponentHeader.html">ComponentHeader</a></li><li><a href="module-ComponentItemDetail.html">ComponentItemDetail</a></li><li><a href="module-ComponentItemRating.html">ComponentItemRating</a></li><li><a href="module-ComponentLoading.html">ComponentLoading</a></li><li><a href="module-ComponentLogo.html">ComponentLogo</a></li><li><a href="module-ComponentScreen.html">ComponentScreen</a></li><li><a href="module-NavigationDrawer.html">NavigationDrawer</a></li><li><a href="module-NavigationStack.html">NavigationStack</a></li><li><a href="module-ScreenAbout.html">ScreenAbout</a></li><li><a href="module-ScreenCart.html">ScreenCart</a></li><li><a href="module-ScreenCheckout.html">ScreenCheckout</a></li><li><a href="module-ScreenDashboard.html">ScreenDashboard</a></li><li><a href="module-ScreenHistory.html">ScreenHistory</a></li><li><a href="module-ScreenLogin.html">ScreenLogin</a></li><li><a href="module-ScreenOTP.html">ScreenOTP</a></li><li><a href="module-ScreenProductComparision.html">ScreenProductComparision</a></li><li><a href="module-ScreenProfile.html">ScreenProfile</a></li><li><a href="module-ScreenRegister.html">ScreenRegister</a></li><li><a href="module-ScreenWishlist.html">ScreenWishlist</a></li></ul><h3>Classes</h3><ul><li><a href="module-ComponentAlert-CustomModal.html">CustomModal</a></li><li><a href="module-ComponentCustomModal-CustomModal.html">CustomModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Dec 11 2020 03:29:23 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

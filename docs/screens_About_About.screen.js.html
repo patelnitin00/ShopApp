@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/About/About.screen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/About/About.screen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file About us Screen
+ * @author Chintan Modi
+ */
+
+import React, { } from 'react';
+import {
+  View, SafeAreaView, StatusBar, Text, ScrollView
+} from 'react-native';
+import styles from './About.styles';
+import Colors from '../../utills/Colors';
+import Header from '../../components/HeaderBasic/HeaderBasic.component'
+/**
+ * About Screen
+ * @module ScreenAbout
+ */
+
+
+/**
+ * About screen where the company's info is displayed
+ * @param {props} props - Props are passed from the Drawer Navigation
+ * @returns {JSX.Element}
+ * @function
+ */
+var AboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque fermentum dui a imperdiet dignissim. Donec ultricies, urna id ullamcorper accumsan, ligula nunc vestibulum orci, sit amet accumsan risus mauris non eros.\n\n Nulla nec scelerisque massa, id varius erat. Nunc non lacinia nunc. Fusce ac imperdiet nunc. Vivamus rhoncus accumsan dolor et aliquet. Maecenas dapibus quam mauris, vitae aliquet libero tempus in.\n\n Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam eget nunc vitae lacus rutrum finibus. Proin lacinia maximus sem, at volutpat felis lobortis convallis. Etiam egestas libero non orci commodo laoreet. Praesent ac nisl lacinia, interdum enim quis, ultricies lorem. Curabitur sit amet blandit libero. In vitae porttitor quam.\n\n\n Nullam urna quam, rutrum sit amet arcu vel, condimentum pretium mi. Cras iaculis vehicula lacus, et facilisis diam venenatis at.\n\nCurabitur sit amet blandit libero. In vitae porttitor quam.\n\n\n Nullam urna quam, rutrum sit amet arcu vel, condimentum pretium mi. Cras iaculis vehicula lacus, et facilisis diam venenatis at.\n\n"
+export default function MyCartScreen(props) {
+ 
+  return (
+    &lt;>
+      &lt;SafeAreaView backgroundColor={Colors.darkPink} />
+      &lt;StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
+      &lt;SafeAreaView style={{ flex: 1 }}>
+        &lt;View style={styles.container}>
+          &lt;Header title="About Us"
+            onLeftPress={() => { props.navigation.openDrawer() }} showMenu/>
+            &lt;ScrollView>
+          &lt;View style={styles.body}>
+              &lt;Text style={styles.aboutText}>{AboutText}&lt;/Text>
+          &lt;/View>
+        &lt;/ScrollView>
+        &lt;/View>
+      &lt;/SafeAreaView>
+    &lt;/>
+  );
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">JSDoc Example</a></h2><h3>Modules</h3><ul><li><a href="module-ComponentAlert.html">ComponentAlert</a></li><li><a href="module-ComponentButton.html">ComponentButton</a></li><li><a href="module-ComponentCustomModal.html">ComponentCustomModal</a></li><li><a href="module-ComponentFilterModal.html">ComponentFilterModal</a></li><li><a href="module-ComponentForm.html">ComponentForm</a></li><li><a href="module-ComponentHeader.html">ComponentHeader</a></li><li><a href="module-ComponentItemDetail.html">ComponentItemDetail</a></li><li><a href="module-ComponentItemRating.html">ComponentItemRating</a></li><li><a href="module-ComponentLoading.html">ComponentLoading</a></li><li><a href="module-ComponentLogo.html">ComponentLogo</a></li><li><a href="module-ComponentScreen.html">ComponentScreen</a></li><li><a href="module-NavigationDrawer.html">NavigationDrawer</a></li><li><a href="module-NavigationStack.html">NavigationStack</a></li><li><a href="module-ScreenAbout.html">ScreenAbout</a></li><li><a href="module-ScreenCart.html">ScreenCart</a></li><li><a href="module-ScreenCheckout.html">ScreenCheckout</a></li><li><a href="module-ScreenDashboard.html">ScreenDashboard</a></li><li><a href="module-ScreenHistory.html">ScreenHistory</a></li><li><a href="module-ScreenLogin.html">ScreenLogin</a></li><li><a href="module-ScreenOTP.html">ScreenOTP</a></li><li><a href="module-ScreenProductComparision.html">ScreenProductComparision</a></li><li><a href="module-ScreenProfile.html">ScreenProfile</a></li><li><a href="module-ScreenRegister.html">ScreenRegister</a></li><li><a href="module-ScreenWishlist.html">ScreenWishlist</a></li></ul><h3>Classes</h3><ul><li><a href="module-ComponentAlert-CustomModal.html">CustomModal</a></li><li><a href="module-ComponentCustomModal-CustomModal.html">CustomModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Dec 11 2020 03:29:23 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

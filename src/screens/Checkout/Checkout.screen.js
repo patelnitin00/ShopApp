@@ -1,3 +1,8 @@
+/**
+ * @file Checkout Screen
+ * @author Nitin Patel & Krutik Parikh
+ */
+
 import React, { useEffect, useState } from 'react';
 import {
   View, SafeAreaView, StatusBar, Text, Alert
@@ -17,8 +22,21 @@ stripe.setOptions({
   // merchantId: 'MERCHANT_ID', // Optional
   androidPayMode: 'test', // Android only
 })
+
+/**
+ * Checkout Screen
+ * @module ScreenCheckout
+ */
+
+/**
+ * Checkout screen where the user place the orders
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function MyCartScreen(props) {
   const dispatch = useDispatch();
+
   const myCart = useSelector(state => state.MyCart.myCart)
   const user = useSelector(state => state.Auth.user)
 
@@ -30,6 +48,24 @@ export default function MyCartScreen(props) {
     })
     setTotalAmount(newAmount)
   }, [])
+        /**
+         * Options Billing Info
+         * @typedef {Object} options
+         * @property {string} requiredBillingAddressFields - Error msg when field is empty
+         * @property {Object} billingAddress - Billing Address object passed to option object
+         */
+
+          /**
+         * Billing Address option
+         * @typedef {Object} billingAddress
+         * @property {string} name - User Name 
+         * @property {string} line1 - User line1 
+         * @property {string} line2 - User line2 
+         * @property {string} city - User city 
+         * @property {string} state - User state 
+         * @property {string} country - User country 
+         * @property {string} postalCode - User postalCode 
+         */
   const proceedtoPayment = () => {
     const options = {
       requiredBillingAddressFields: 'full',
@@ -56,6 +92,28 @@ export default function MyCartScreen(props) {
             totalPrice: item.price * item.quantity,
           })
         })
+         /**
+         * items
+         * @typedef {Object} items
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
+
+        /**
+         * Order
+         * @typedef {Object} order
+         * @property {Object} user - User stored in the State it gets from Redux
+         * @property {number} totalBillPayed - Bill Payed
+         * @property {string} orderStatus - Order Status 
+         * @property {any} orderId
+         * @property {any} userID 
+         * @property {Object} items 
+         */
         const order = {
           user: { ...user },
           totalBillPayed: totalAmount,

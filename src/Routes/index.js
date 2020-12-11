@@ -1,3 +1,7 @@
+/**
+ * @file Navigation Screen
+ * @author Nitin Patel
+ */
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -21,6 +25,18 @@ import ProductComparison from '../screens/ProductComparison/ProductComparison.sc
 import Loading from '../components/LoadingModal/LoadingModal'
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+/**
+ * Stack Navigation
+ * @module NavigationStack
+ */
+
+
+/**
+ * Stack Navigation - Navigates to all the screen 
+ * @param {props} props - Props are passed to screen
+ * @returns {JSX.Element}
+ * @function
+ */
 class Routes extends Component {
     render() {
         return (

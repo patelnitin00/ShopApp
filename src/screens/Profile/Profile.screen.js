@@ -1,3 +1,8 @@
+/**
+ * @file Profile Screen
+ * @author Krutik Parikh
+ */
+
 import React, { useState } from 'react';
 import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
 import styles from './Profile.styles';
@@ -8,6 +13,17 @@ import Colors from '../../utills/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSelector } from 'react-redux'
 import firestore from '@react-native-firebase/firestore';
+/**
+ * Profile Screen
+ * @module ScreenProfile
+ */
+
+/**
+ * Profile screen 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function Login(props) {
   const user = useSelector(state => state.Auth.user)
   const [fullName, setFullName] = useState(user.fullName);
@@ -20,6 +36,15 @@ export default function Login(props) {
       && city.trim() != '' && country.trim() != '' && address.trim() != ''
     ) {
       if (ValidateEmail(email)) {
+         /**
+         * userData
+         * @typedef {Object} userData
+         * @property {string} email - userData Email
+         * @property {string} fullName - userData fullName
+         * @property {string} country - userData country
+         * @property {string} city - userData city
+         * @property {string} address - userData address
+         */
         const userData = { email, fullName, country, city, address }
         firestore()
           .collection('Users')

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/Checkout/Checkout.screen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/Checkout/Checkout.screen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Checkout Screen
+ * @author Nitin Patel &amp; Krutik Parikh
+ */
+
+import React, { useEffect, useState } from 'react';
+import {
+  View, SafeAreaView, StatusBar, Text, Alert
+} from 'react-native';
+import styles from './Checkout.styles';
+import Button from '../../components/Button/Button.component';
+import Colors from '../../utills/Colors';
+import Header from '../../components/HeaderBasic/HeaderBasic.component'
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment'
+import { emptyCart } from '../../Redux/Actions/MyCart'
+import firestore from '@react-native-firebase/firestore';
+import { setLoading } from '../../Redux/Actions/Main'
+import stripe from 'tipsi-stripe'
+stripe.setOptions({
+  publishableKey: 'pk_test_51HWBj3IWw1tn8IKQnYV866tYHwrdwaLPq06ewQKojgbxXG6xEIVziBpk0v2BldINWfAvID2YfM8EkMvtG5iqw6oM001A9RjKwY',
+  // merchantId: 'MERCHANT_ID', // Optional
+  androidPayMode: 'test', // Android only
+})
+
+/**
+ * Checkout Screen
+ * @module ScreenCheckout
+ */
+
+/**
+ * Checkout screen where the user place the orders
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
+export default function MyCartScreen(props) {
+  const dispatch = useDispatch();
+
+  const myCart = useSelector(state => state.MyCart.myCart)
+  const user = useSelector(state => state.Auth.user)
+
+  const [totalAmount, setTotalAmount] = useState(0)
+  useEffect(() => {
+    let newAmount = 0;
+    myCart.map(item => {
+      newAmount += item.price * item.quantity;
+    })
+    setTotalAmount(newAmount)
+  }, [])
+        /**
+         * Options Billing Info
+         * @typedef {Object} options
+         * @property {string} requiredBillingAddressFields - Error msg when field is empty
+         * @property {Object} billingAddress - Billing Address object passed to option object
+         */
+
+          /**
+         * Billing Address option
+         * @typedef {Object} billingAddress
+         * @property {string} name - User Name 
+         * @property {string} line1 - User line1 
+         * @property {string} line2 - User line2 
+         * @property {string} city - User city 
+         * @property {string} state - User state 
+         * @property {string} country - User country 
+         * @property {string} postalCode - User postalCode 
+         */
+  const proceedtoPayment = () => {
+    const options = {
+      requiredBillingAddressFields: 'full',
+      prefilledInformation: {
+        billingAddress: {
+          name: 'Gunilla Haugeh',
+          line1: 'Canary Place',
+          line2: '3',
+          city: 'Macon',
+          state: 'Georgia',
+          country: 'US',
+          postalCode: '31217',
+        },
+      },
+    }
+    stripe
+      .paymentRequestWithCardForm(options)
+      .then(stripeTokenInfo => {
+        dispatch(setLoading(true))
+        let items = [];
+        myCart.map(item => {
+          items.push({
+            ...item,
+            totalPrice: item.price * item.quantity,
+          })
+        })
+         /**
+         * items
+         * @typedef {Object} items
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
+
+        /**
+         * Order
+         * @typedef {Object} order
+         * @property {Object} user - User stored in the State it gets from Redux
+         * @property {number} totalBillPayed - Bill Payed
+         * @property {string} orderStatus - Order Status 
+         * @property {any} orderId
+         * @property {any} userID 
+         * @property {Object} items 
+         */
+        const order = {
+          user: { ...user },
+          totalBillPayed: totalAmount,
+          timeStamp: moment().valueOf(),
+          orderStatus: 'In Process',
+          orderId: (stripeTokenInfo.tokenId).toString().replace("tok_", ""),
+          userId: user.uid,
+          items
+        }
+        firestore()
+          .collection('Orders')
+          .doc((stripeTokenInfo.tokenId).toString().replace("tok_", ""))
+          .set(order)
+          .then(() => {
+            dispatch(emptyCart())
+            props.navigation.goBack()
+            dispatch(setLoading(false))
+          })
+          .catch((err) => {
+            Alert.alert(err.message)
+            dispatch(setLoading(false))
+          });
+      })
+      .catch(error => {
+        Alert.alert(null, 'Payment cancelled.');
+        dispatch(setLoading(false))
+      });
+  }
+  return (
+    &lt;>
+      &lt;SafeAreaView backgroundColor={Colors.darkPink} />
+      &lt;StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
+      &lt;SafeAreaView style={{ flex: 1 }}>
+        &lt;View style={styles.container}>
+          &lt;Header title="Checkout"
+            onLeftPress={() => { props.navigation.goBack() }} />
+          &lt;View style={styles.body}>
+            &lt;View style={styles.deliveryDetailsContainer}>
+              &lt;Text style={styles.headingText}>Delivery Details&lt;/Text>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Name&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.fullName}&lt;/Text>
+              &lt;/View>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Email&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.email}&lt;/Text>
+              &lt;/View>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Mobile No.&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.phoneNumber}&lt;/Text>
+              &lt;/View>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Address&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.address}&lt;/Text>
+              &lt;/View>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>City&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.city}&lt;/Text>
+              &lt;/View>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Country&lt;/Text>
+                &lt;Text style={styles.valueText}>{user.country}&lt;/Text>
+              &lt;/View>
+            &lt;/View>
+            &lt;View style={styles.deliveryDetailsContainer}>
+              &lt;Text style={styles.headingText}>Bill Details&lt;/Text>
+              &lt;View style={styles.row}>
+                &lt;Text style={styles.labelText}>Total&lt;/Text>
+                &lt;Text style={styles.valueText}>{totalAmount} CAD&lt;/Text>
+              &lt;/View>
+            &lt;/View>
+          &lt;/View>
+          &lt;Button
+            disabled={myCart.length &lt; 1}
+            title="Proceed to Payment"
+            onPress={proceedtoPayment}
+            containerStyle={styles.buttonContainer} />
+        &lt;/View>
+      &lt;/SafeAreaView>
+    &lt;/>
+  );
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">JSDoc Example</a></h2><h3>Modules</h3><ul><li><a href="module-ComponentAlert.html">ComponentAlert</a></li><li><a href="module-ComponentButton.html">ComponentButton</a></li><li><a href="module-ComponentCustomModal.html">ComponentCustomModal</a></li><li><a href="module-ComponentFilterModal.html">ComponentFilterModal</a></li><li><a href="module-ComponentForm.html">ComponentForm</a></li><li><a href="module-ComponentHeader.html">ComponentHeader</a></li><li><a href="module-ComponentItemDetail.html">ComponentItemDetail</a></li><li><a href="module-ComponentItemRating.html">ComponentItemRating</a></li><li><a href="module-ComponentLoading.html">ComponentLoading</a></li><li><a href="module-ComponentLogo.html">ComponentLogo</a></li><li><a href="module-ComponentScreen.html">ComponentScreen</a></li><li><a href="module-NavigationDrawer.html">NavigationDrawer</a></li><li><a href="module-NavigationStack.html">NavigationStack</a></li><li><a href="module-ScreenAbout.html">ScreenAbout</a></li><li><a href="module-ScreenCart.html">ScreenCart</a></li><li><a href="module-ScreenCheckout.html">ScreenCheckout</a></li><li><a href="module-ScreenDashboard.html">ScreenDashboard</a></li><li><a href="module-ScreenHistory.html">ScreenHistory</a></li><li><a href="module-ScreenLogin.html">ScreenLogin</a></li><li><a href="module-ScreenOTP.html">ScreenOTP</a></li><li><a href="module-ScreenProductComparision.html">ScreenProductComparision</a></li><li><a href="module-ScreenProfile.html">ScreenProfile</a></li><li><a href="module-ScreenRegister.html">ScreenRegister</a></li><li><a href="module-ScreenWishlist.html">ScreenWishlist</a></li></ul><h3>Classes</h3><ul><li><a href="module-ComponentAlert-CustomModal.html">CustomModal</a></li><li><a href="module-ComponentCustomModal-CustomModal.html">CustomModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Dec 11 2020 03:29:23 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

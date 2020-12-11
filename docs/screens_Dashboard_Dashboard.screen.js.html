@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/Dashboard/Dashboard.screen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/Dashboard/Dashboard.screen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Dashboard Screen
+ * @author Nitin Patel, Krutik Parikh &amp; Chintan Modi
+ */
+import React, { useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, ActivityIndicator } from 'react-native';
+import styles from './Dashboard.styles';
+import ItemDetailModal from '../../components/ItemDetailModal/ItemDetailModal.Component'
+import Colors from '../../utills/Colors'
+import Header from '../../components/HeaderBasic/HeaderBasic.component'
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import SearchBar from '../../components/SearchBar/SearchBar.component'
+import firestore from '@react-native-firebase/firestore';
+import FilterModal from '../../components/FilterModal/FilterModal.Component'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { height } from 'react-native-dimension';
+import moment from 'moment'
+import ModalDropdown from 'react-native-modal-dropdown';
+/**
+ * Dashboard Screen
+ * @module ScreenDashboard
+ */
+
+/**
+ * Dashboard screen homepage of the App 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
+export default function Dashboard(props) {
+  const [allProducts, setAllProducts] = useState([]);
+  const [newProdutcs, setNewProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
+  const [selectedCategoryProducts, setSelectedCategoryProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState([]);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [isItemDetailVisible, setIsItemDetailVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [categories, setCategories] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  useEffect(() => {
+    getProducts()
+  }, [])
+  const getProducts = () => {
+    const fetchedProducts = [];
+    firestore()
+      .collection('Products')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          fetchedProducts.push(documentSnapshot.data());
+        });
+        let fetchedPopularProducts = ([...fetchedProducts].sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
+        let fetchedNewProducts = ([...fetchedProducts].sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
+        setNewProducts(fetchedNewProducts)
+        setPopularProducts(fetchedPopularProducts)
+        setAllProducts(fetchedProducts)
+        window.products = [...fetchedProducts]
+      });
+    const newCategories = ["All"];
+    firestore()
+      .collection('Categories')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          newCategories.push(documentSnapshot.data().name);
+        });
+        setCategories(newCategories)
+      });
+  }
+  const search = (val) => {
+    setSearchValue(val)
+    if (selectedCategory == "All") {
+      const newData = window.products.filter(item => {
+        const itemData = `${item.title.toUpperCase()} ${item.title.toUpperCase()} ${item.title.toUpperCase()} `;
+        const textData = val.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      // if (newData.length != 0) {
+      let fetchedPopularProducts = (newData.sort((a, b) => b.clicked - a.clicked)).splice(0, 5)
+      let fetchedNewProducts = (newData.sort((a, b) => b.createdAt - a.createdAt)).splice(0, 5)
+      setNewProducts(fetchedNewProducts)
+      setPopularProducts(fetchedPopularProducts)
+      setAllProducts(newData)
+    }
+    else {
+      const newData = window.selectedCategoryProducts.filter(item => {
+        const itemData = `${item.title.toUpperCase()} ${item.title.toUpperCase()} ${item.title.toUpperCase()} `;
+        const textData = val.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setSelectedCategoryProducts(newData)
+    }
+    // }
+  }
+  const renderProduct = ({ item, index }) => {
+    let price = item.price
+    let specialOffer = item.specialOffer.discount != null &amp;&amp; moment().isBetween(item.specialOffer.from, item.specialOffer.to);
+    if (specialOffer &amp;&amp; item.specialOffer.minOrder == null) {
+      price = item.price - ((item.specialOffer.discount * price) / 100);
+    }
+    return (
+      &lt;TouchableOpacity style={styles.productContainer}
+        onPress={() => { setSelectedItem({ ...item, price }); setIsItemDetailVisible(!isItemDetailVisible) }}>
+        &lt;View>
+          &lt;Image source={{ uri: item.image }} style={styles.productImage} />
+          &lt;Text numberOfLines={1} style={styles.productTitle}>{item.title}&lt;/Text>
+          {item.rating &amp;&amp; &lt;View style={styles.rateContainer}>
+            &lt;Text style={styles.ratingText}>{item.rating.toFixed(1)}&lt;/Text>
+            &lt;Ionicons name="ios-star" color={Colors.primaryYellow} size={height(2)} />
+          &lt;/View>}
+          {item.bestSelling &amp;&amp; &lt;View style={styles.bestContainer}>
+            &lt;MaterialIcons name="verified-user" color={Colors.green} size={height(2)} />
+          &lt;/View>}
+          {specialOffer &amp;&amp;
+            &lt;View style={styles.specialOfferContainer}>
+              &lt;Text style={styles.specialOfferText}>{item.specialOffer.discount}% Off
+          {item.specialOffer.minOrder != null &amp;&amp; " at " + item.specialOffer.minOrder}&lt;/Text>
+            &lt;/View>}
+        &lt;/View>
+        &lt;View style={styles.priceConainer}>
+          &lt;Text style={styles.priceLableText}>Price:&lt;/Text>
+          &lt;Text style={styles.priceText}>{price.toFixed(0)}&lt;/Text>
+        &lt;/View>
+        &lt;View style={styles.priceConainer}>
+          &lt;Text style={styles.priceLableText}>In Stock:&lt;/Text>
+          &lt;Text style={styles.priceText}>{item.inStock}&lt;/Text>
+        &lt;/View>
+      &lt;/TouchableOpacity>
+    )
+  }
+        /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
+  const renderAllProduct = ({ item, index }) => {
+    let price = item.price
+    let specialOffer = item.specialOffer.discount != null &amp;&amp; moment().isBetween(item.specialOffer.from, item.specialOffer.to);
+    if (specialOffer) {
+      price = item.price - ((item.specialOffer.discount * price) / 100);
+    }
+    return (
+      &lt;TouchableOpacity style={styles.productContainerAll}
+        onPress={() => { setSelectedItem({ ...item, price }); setIsItemDetailVisible(!isItemDetailVisible) }}>
+        &lt;View>
+          &lt;Image source={{ uri: item.image }} style={styles.productImage} />
+          &lt;Text numberOfLines={1} style={styles.productTitle}>{item.title}&lt;/Text>
+          {item.rating &amp;&amp; &lt;View style={styles.rateContainer}>
+            &lt;Text style={styles.ratingText}>{item.rating.toFixed(1)}&lt;/Text>
+            &lt;Ionicons name="ios-star" color={Colors.primaryYellow} size={height(2)} />
+          &lt;/View>}
+          {item.bestSelling &amp;&amp; &lt;View style={styles.bestContainer}>
+            &lt;MaterialIcons name="verified-user" color={Colors.green} size={height(2)} />
+          &lt;/View>}
+          {specialOffer &amp;&amp;
+            &lt;View style={styles.specialOfferContainer}>
+              &lt;Text style={styles.specialOfferText}>{item.specialOffer.discount}% Off
+          {item.specialOffer.minOrder != null &amp;&amp; "at " + item.specialOffer.minOrder}&lt;/Text>
+            &lt;/View>}
+        &lt;/View>
+        &lt;View style={styles.priceConainer}>
+          &lt;Text style={styles.priceLableText}>Price:&lt;/Text>
+          &lt;Text style={styles.priceText}>{price}&lt;/Text>
+        &lt;/View>
+        &lt;View style={styles.priceConainer}>
+          &lt;Text style={styles.priceLableText}>In Stock:&lt;/Text>
+          &lt;Text style={styles.priceText}>{item.inStock}&lt;/Text>
+        &lt;/View>
+      &lt;/TouchableOpacity>
+    )
+  }
+  const renderEmptyListComponent = () => (
+    &lt;View style={styles.loaderContainer}>
+      {searchValue == '' ?
+        &lt;ActivityIndicator color={Colors.primaryPink} size={"large"} />
+        :
+        &lt;Text>No products found with "{searchValue}"&lt;/Text>
+      }
+    &lt;/View>
+  )
+  const toggleFilter = () => setIsFilterVisible(!isFilterVisible);
+  const applyFilter = (sortBy) => {
+    if (sortBy == "byPrice") {
+      if (selectedCategory == "All") {
+        setAllProducts(allProducts.sort((a, b) => a.price - b.price))
+        setPopularProducts(popularProducts.sort((a, b) => a.price - b.price))
+        setNewProducts(newProdutcs.sort((a, b) => a.price - b.price))
+      }
+      else {
+        setSelectedCategoryProducts(selectedCategoryProducts.sort((a, b) => a.price - b.price))
+      }
+    }
+    else if (sortBy == "byName") {
+      if (selectedCategory == "All") {
+        setAllProducts(allProducts.sort(function (a, b) {
+          var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+          if (nameA &lt; nameB) //sort string ascending
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0; //default return value (no sorting)
+        }))
+        setPopularProducts(popularProducts.sort(function (a, b) {
+          var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+          if (nameA &lt; nameB) //sort string ascending
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0; //default return value (no sorting)
+        }))
+        setNewProducts(newProdutcs.sort(function (a, b) {
+          var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+          if (nameA &lt; nameB) //sort string ascending
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0; //default return value (no sorting)
+        }))
+      }
+      else {
+        setSelectedCategoryProducts(selectedCategoryProducts.sort(function (a, b) {
+          var nameA = a.title.toLowerCase(), nameB = b.title.toLowerCase();
+          if (nameA &lt; nameB) //sort string ascending
+            return -1;
+          if (nameA > nameB)
+            return 1;
+          return 0; //default return value (no sorting)
+        }))
+      }
+    }
+    toggleFilter()
+  }
+  return (
+    &lt;>
+      &lt;SafeAreaView backgroundColor={Colors.darkPink} />
+      &lt;StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
+      &lt;SafeAreaView style={{ flex: 1 }}>
+        &lt;View style={styles.container}>
+          &lt;Header title="Shop Now" showMenu showFilter onPressFilter={toggleFilter}
+            onLeftPress={() => { props.navigation.openDrawer() }} />
+          &lt;View style={styles.searchRow}>
+            &lt;SearchBar value={searchValue} onChangeText={search} />
+            &lt;View style={styles.dropDownContainer}>
+              &lt;ModalDropdown options={categories} defaultIndex={0}
+                onSelect={(index, val) => {
+                  setSelectedCategory(val)
+                  var newProducts = window.products.filter(item => item.category == val)
+                  setSelectedCategoryProducts(newProducts)
+                  window.selectedCategoryProducts = newProducts
+                }}>
+                &lt;View style={styles.categoryRow}>
+                  &lt;Text numberOfLines={2} style={styles.selectedCategoryText}>{selectedCategory}&lt;/Text>
+                  &lt;Ionicons name="caret-down" size={height(2.5)} color={'black'} />
+                &lt;/View>
+              &lt;/ModalDropdown>
+            &lt;/View>
+          &lt;/View>
+          &lt;ScrollView showsVerticalScrollIndicator={true}>
+            {selectedCategory == 'All' &amp;&amp;
+              &lt;View style={styles.categoryContainer}>
+                &lt;Text style={styles.categoryTitle}>New Products&lt;/Text>
+                &lt;FlatList
+                  data={newProdutcs}
+                  renderItem={renderProduct}
+                  horizontal
+                  ListEmptyComponent={renderEmptyListComponent}
+                />
+              &lt;/View>}
+            {selectedCategory == 'All' &amp;&amp;
+              &lt;View style={styles.categoryContainer}>
+                &lt;Text style={styles.categoryTitle}>Popular Products&lt;/Text>
+                &lt;FlatList
+                  data={popularProducts}
+                  renderItem={renderProduct}
+                  horizontal
+                  ListEmptyComponent={renderEmptyListComponent}
+                />
+              &lt;/View>}
+            &lt;Text style={styles.categoryTitle}>{selectedCategory == 'All' ? "All Products" : selectedCategory}&lt;/Text>
+            &lt;FlatList
+              data={selectedCategory == "All" ? allProducts : selectedCategoryProducts}
+              renderItem={renderAllProduct}
+              numColumns={3}
+              ListEmptyComponent={renderEmptyListComponent}
+            />
+          &lt;/ScrollView>
+          &lt;FilterModal isVisible={isFilterVisible} onRequestClose={toggleFilter} onPressApply={applyFilter} />
+          &lt;ItemDetailModal isVisible={isItemDetailVisible} item={selectedItem}
+            onRequestClose={() => setIsItemDetailVisible(!isItemDetailVisible)} />
+        &lt;/View>
+      &lt;/SafeAreaView>
+    &lt;/>
+  );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">JSDoc Example</a></h2><h3>Modules</h3><ul><li><a href="module-ComponentAlert.html">ComponentAlert</a></li><li><a href="module-ComponentButton.html">ComponentButton</a></li><li><a href="module-ComponentCustomModal.html">ComponentCustomModal</a></li><li><a href="module-ComponentFilterModal.html">ComponentFilterModal</a></li><li><a href="module-ComponentForm.html">ComponentForm</a></li><li><a href="module-ComponentHeader.html">ComponentHeader</a></li><li><a href="module-ComponentItemDetail.html">ComponentItemDetail</a></li><li><a href="module-ComponentItemRating.html">ComponentItemRating</a></li><li><a href="module-ComponentLoading.html">ComponentLoading</a></li><li><a href="module-ComponentLogo.html">ComponentLogo</a></li><li><a href="module-ComponentScreen.html">ComponentScreen</a></li><li><a href="module-NavigationDrawer.html">NavigationDrawer</a></li><li><a href="module-NavigationStack.html">NavigationStack</a></li><li><a href="module-ScreenAbout.html">ScreenAbout</a></li><li><a href="module-ScreenCart.html">ScreenCart</a></li><li><a href="module-ScreenCheckout.html">ScreenCheckout</a></li><li><a href="module-ScreenDashboard.html">ScreenDashboard</a></li><li><a href="module-ScreenHistory.html">ScreenHistory</a></li><li><a href="module-ScreenLogin.html">ScreenLogin</a></li><li><a href="module-ScreenOTP.html">ScreenOTP</a></li><li><a href="module-ScreenProductComparision.html">ScreenProductComparision</a></li><li><a href="module-ScreenProfile.html">ScreenProfile</a></li><li><a href="module-ScreenRegister.html">ScreenRegister</a></li><li><a href="module-ScreenWishlist.html">ScreenWishlist</a></li></ul><h3>Classes</h3><ul><li><a href="module-ComponentAlert-CustomModal.html">CustomModal</a></li><li><a href="module-ComponentCustomModal-CustomModal.html">CustomModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Dec 11 2020 03:29:23 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,3 +1,7 @@
+/**
+ * @file OTP Screen
+ * @author Krutik Parikh
+ */
 import React, { useState, useEffect } from 'react';
 import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
 import styles from './VerifyOtp.styles';
@@ -12,6 +16,17 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { setLoading } from '../../Redux/Actions/Main';
+/**
+ * VerifyOTP Screen
+ * @module ScreenOTP
+ */
+
+/**
+ * VerifyOTP screen 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function Login(props) {
   const dispatch = useDispatch()
   const phone = props.route?.params.phone;

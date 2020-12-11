@@ -6,6 +6,25 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+/**
+ * @file Custom Modal Component
+ * @author Nitin Patel
+ */
+/**
+ * Custom Component Module
+ * @module ComponentCustomModal
+ */
+
+/**
+ * Custom Modal component
+ * @param {boolean} this.props.isVisible - Props of visible passed  
+ * @param {boolean} this.props.success - Props of sucess passed 
+ * @param {boolean} this.props.failure - Props of failure passed 
+ * @param {string} this.props.Text - Props of Text passed
+ * @returns {JSX.Element}
+ */
+
+
 class CustomModal extends React.Component {
     constructor(props) {
         super(props);

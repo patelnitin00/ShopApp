@@ -1,3 +1,8 @@
+/**
+ * @file Cart Screen
+ * @author Nitin Patel & Krutik Parikh
+ */
+
 import React, { } from 'react';
 import {
   View, SafeAreaView, StatusBar, FlatList, Text,
@@ -12,6 +17,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incrementQty, decrementQty } from '../../Redux/Actions/MyCart';
 import { height } from 'react-native-dimension';
 import moment from 'moment'
+/**
+ * Shopping Cart Screen
+ * @module ScreenCart
+ */
+
+/**
+ * Shopping Cart where all the items are displayed
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function MyCartScreen(props) {
   const dispatch = useDispatch()
   const myCart = useSelector(state => state.MyCart.myCart)
@@ -24,6 +40,17 @@ export default function MyCartScreen(props) {
     if (item.quantity >= 10) {
       price = price - ((10 * price) / 100);
     }
+        /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
     return (
       <View style={styles.itemMainContainer}>
         <Image

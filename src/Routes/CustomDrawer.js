@@ -1,3 +1,7 @@
+/**
+ * @file Navigation Drawer
+ * @author Krutik Parikh
+ */
 import React, { } from 'react';
 import {
     Image,
@@ -11,6 +15,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/Actions/Auth';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+/**
+ * Drawer Navigation
+ * @module NavigationDrawer
+ */
+
+/**
+ * Drawer Navigation - side bar navigation that navigates to the diffrent screens
+ * @param {props} props - Props are passed to screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function CustomDrawerContentComponent(props) {
     const user = useSelector(state => state.Auth.user);
     const dispatch = useDispatch();

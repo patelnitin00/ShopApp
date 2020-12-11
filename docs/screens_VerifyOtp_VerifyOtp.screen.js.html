@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: screens/VerifyOtp/VerifyOtp.screen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: screens/VerifyOtp/VerifyOtp.screen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file OTP Screen
+ * @author Krutik Parikh
+ */
+import React, { useState, useEffect } from 'react';
+import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
+import styles from './VerifyOtp.styles';
+import Button from '../../components/Button/Button.component';
+import { useDispatch } from 'react-redux';
+import { login } from '../../Redux/Actions/Auth';
+import Header from '../../components/HeaderBasic/HeaderBasic.component'
+import Logo from '../../components/Logo/Logo.component'
+import Colors from '../../utills/Colors';
+import OTPInputView from '@twotalltotems/react-native-otp-input'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import { setLoading } from '../../Redux/Actions/Main';
+/**
+ * VerifyOTP Screen
+ * @module ScreenOTP
+ */
+
+/**
+ * VerifyOTP screen 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
+export default function Login(props) {
+  const dispatch = useDispatch()
+  const phone = props.route?.params.phone;
+  const [confirmation, setConfirmation] = useState(null);
+  const [code, setCode] = useState(null);
+  const onAuthStateChanged = async (data) => {
+    if (data != null) {
+      const user = await firestore()
+        .collection('Users')
+        .doc(data.uid)
+        .get();
+      if (user.exists) {
+        dispatch(login(user.data()))
+      }
+      else {
+        props.navigation.navigate("Signup", { uid: data.uid, phone })
+      }
+    }
+  }
+  useEffect(() => {
+    const authChangeSubscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    auth().signInWithPhoneNumber(phone)
+      .then((confirmResult) => {
+        setConfirmation(confirmResult);
+      })
+      .catch(error => {
+        alert("Phone no. is Incorrect")
+        console.log(error)
+        props.navigation.goBack();
+      });
+    return authChangeSubscriber;
+  }, [])
+  const confirmCode = async () => {
+    dispatch(setLoading(true))
+    try {
+      await confirmation.confirm(code)
+        .then(async (data) => {
+          const user = await firestore()
+            .collection('Users')
+            .doc(data.user.uid)
+            .get();
+          if (user.exists) {
+            dispatch(setLoading(false))
+            dispatch(login(user.data()))
+          }
+          else {
+            dispatch(setLoading(false))
+            props.navigation.navigate("Signup", { uid: data.user.uid })
+          }
+        })
+    } catch (error) {
+      dispatch(setLoading(false))
+      Alert.alert("Incorrect verfication code.")
+    }
+  }
+  return (
+    &lt;>
+      &lt;SafeAreaView backgroundColor={Colors.darkPink} />
+      &lt;StatusBar barStyle={"light-content"} backgroundColor={Colors.darkPink} />
+      &lt;SafeAreaView style={{ flex: 1 }}>
+        &lt;View style={styles.container}>
+          &lt;Header title="Authentication" hideBackIcon />
+          &lt;KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            &lt;View style={styles.body}>
+              &lt;Logo />
+              &lt;Text style={styles.enterText}>
+                Enter verification code received via text message
+            &lt;/Text>
+              &lt;View style={styles.inputsContainer}>
+                &lt;OTPInputView
+                  style={styles.input}
+                  pinCount={6}
+                  onCodeChanged={code => setCode(code)}
+                  autoFocusOnLoad
+                  codeInputFieldStyle={styles.underlineStyleBase}
+                  codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                />
+              &lt;/View>
+              &lt;Button
+                title="Confirm"
+                onPress={confirmCode}
+                containerStyle={styles.buttonContainer} />
+              &lt;Text style={styles.didnot}>Didn't get verification code?
+              &lt;Text style={styles.resend}> Resend&lt;/Text>&lt;/Text>
+            &lt;/View>
+          &lt;/KeyboardAwareScrollView>
+        &lt;/View>
+      &lt;/SafeAreaView>
+    &lt;/>
+  );
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">JSDoc Example</a></h2><h3>Modules</h3><ul><li><a href="module-ComponentAlert.html">ComponentAlert</a></li><li><a href="module-ComponentButton.html">ComponentButton</a></li><li><a href="module-ComponentCustomModal.html">ComponentCustomModal</a></li><li><a href="module-ComponentFilterModal.html">ComponentFilterModal</a></li><li><a href="module-ComponentForm.html">ComponentForm</a></li><li><a href="module-ComponentHeader.html">ComponentHeader</a></li><li><a href="module-ComponentItemDetail.html">ComponentItemDetail</a></li><li><a href="module-ComponentItemRating.html">ComponentItemRating</a></li><li><a href="module-ComponentLoading.html">ComponentLoading</a></li><li><a href="module-ComponentLogo.html">ComponentLogo</a></li><li><a href="module-ComponentScreen.html">ComponentScreen</a></li><li><a href="module-NavigationDrawer.html">NavigationDrawer</a></li><li><a href="module-NavigationStack.html">NavigationStack</a></li><li><a href="module-ScreenAbout.html">ScreenAbout</a></li><li><a href="module-ScreenCart.html">ScreenCart</a></li><li><a href="module-ScreenCheckout.html">ScreenCheckout</a></li><li><a href="module-ScreenDashboard.html">ScreenDashboard</a></li><li><a href="module-ScreenHistory.html">ScreenHistory</a></li><li><a href="module-ScreenLogin.html">ScreenLogin</a></li><li><a href="module-ScreenOTP.html">ScreenOTP</a></li><li><a href="module-ScreenProductComparision.html">ScreenProductComparision</a></li><li><a href="module-ScreenProfile.html">ScreenProfile</a></li><li><a href="module-ScreenRegister.html">ScreenRegister</a></li><li><a href="module-ScreenWishlist.html">ScreenWishlist</a></li></ul><h3>Classes</h3><ul><li><a href="module-ComponentAlert-CustomModal.html">CustomModal</a></li><li><a href="module-ComponentCustomModal-CustomModal.html">CustomModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Dec 11 2020 03:29:23 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

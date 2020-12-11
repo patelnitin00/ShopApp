@@ -1,3 +1,8 @@
+/**
+ * @file Signup Screen
+ * @author Chintan Modi
+ */
+
 import React, { useEffect, useState } from 'react';
 import { View, SafeAreaView, StatusBar, Text, Alert } from 'react-native';
 import styles from './Signup.styles';
@@ -11,6 +16,17 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch } from 'react-redux'
 import { login } from '../../Redux/Actions/Auth';
 import firestore from '@react-native-firebase/firestore';
+/**
+ * Signup Screen
+ * @module ScreenRegister
+ */
+
+/**
+ * Resgistration screen 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function Login(props) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +44,16 @@ export default function Login(props) {
       && city.trim() != '' && country.trim() != '' && address.trim() != ''
     ) {
       if (ValidateEmail(email)) {
+         /**
+         * userData
+         * @typedef {Object} userData
+         * @property {any} uid - userData ID
+         * @property {string} email - userData Email
+         * @property {string} fullName - userData fullName
+         * @property {string} country - userData country
+         * @property {string} city - userData city
+         * @property {string} address - userData address
+         */
         const userData = { email, fullName, uid, phoneNumber, country, city, address }
         firestore()
           .collection('Users')

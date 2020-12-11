@@ -6,6 +6,33 @@ import { AirbnbRating } from 'react-native-ratings';
 import Button from '../Button/Button.component'
 import { height, width } from 'react-native-dimension';
 import firestore from '@react-native-firebase/firestore';
+/**
+ * @file Item Rating Component
+ * @author Krutik Parikh
+ */
+/**
+ * Item Component Module
+ * @module ComponentItemRating
+ */
+/**
+ * Item
+ * @typedef {Object} Item
+ * @property {number} id - Item ID
+ * @property {String} title - Item Name
+ * @property {string} image - Item Image URL
+ * @property {string} price - Item Price
+ * @property {string} inStock - Item InStock
+ * @property {string} category - Item Category
+ */
+/**
+ * Item Rating component when the order is filled and completed user can click the image and this component will popup
+ * @param {boolean} isVisible - Visibility passed as props 
+ * @param {string} onRequestClose - Function that close the modal on click
+ * @param {Item} Item - Item Object gets from firebase
+ * @returns {JSX.Element}
+ * @function
+ */
+
 export default function WrapperComponent({ isVisible, onRequestClose, item }) {
     const [rating, setRating] = useState(3)
     const rateProduct = async () => {

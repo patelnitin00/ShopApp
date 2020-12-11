@@ -5,6 +5,20 @@ import {
 import Modal from 'react-native-modal';
 import Colors from '../../utills/Colors';
 import { useSelector } from 'react-redux'
+/**
+ * @file Loading Modal Component
+ * @author Nitin Patel
+ */
+/**
+ * Loading Component Module
+ * @module ComponentLoading
+ */
+
+/**
+ * Loading component renders when the screen is being load
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function SuccessModal() {
     const isVisible = useSelector(state => state.Main.loading)
     return (

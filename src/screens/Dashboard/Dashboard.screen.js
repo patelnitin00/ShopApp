@@ -1,3 +1,7 @@
+/**
+ * @file Dashboard Screen
+ * @author Nitin Patel, Krutik Parikh & Chintan Modi
+ */
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, ActivityIndicator } from 'react-native';
 import styles from './Dashboard.styles';
@@ -13,6 +17,17 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { height } from 'react-native-dimension';
 import moment from 'moment'
 import ModalDropdown from 'react-native-modal-dropdown';
+/**
+ * Dashboard Screen
+ * @module ScreenDashboard
+ */
+
+/**
+ * Dashboard screen homepage of the App 
+ * @param {props} props - Mainly Navigation props are passed to this screen
+ * @returns {JSX.Element}
+ * @function
+ */
 export default function Dashboard(props) {
   const [allProducts, setAllProducts] = useState([]);
   const [newProdutcs, setNewProducts] = useState([]);
@@ -115,6 +130,17 @@ export default function Dashboard(props) {
       </TouchableOpacity>
     )
   }
+        /**
+         * item
+         * @typedef {Object} item
+         * @property {number} id - Item ID
+         * @property {String} title - Item Name
+         * @property {string} image - Item Image URL
+         * @property {string} price - Item Price
+         * @property {string} inStock - Item InStock
+         * @property {string} category - Item Category
+         * @property {string} quantity - Item Quantity
+         */
   const renderAllProduct = ({ item, index }) => {
     let price = item.price
     let specialOffer = item.specialOffer.discount != null && moment().isBetween(item.specialOffer.from, item.specialOffer.to);
