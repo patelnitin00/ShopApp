@@ -1,6 +1,6 @@
 /**
  * @file Checkout Screen
- * @author Nitin Patel & Krutik Parikh
+ * @author Nitin Patel
  */
 
 import React, { useEffect, useState } from 'react';

@@ -1,6 +1,6 @@
 /**
  * @file Dashboard Screen
- * @author Nitin Patel, Krutik Parikh & Chintan Modi
+ * @author Nitin Patel & Krutik Parikh 
  */
 import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StatusBar, Image, ScrollView, ActivityIndicator } from 'react-native';

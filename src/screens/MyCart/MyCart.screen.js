@@ -1,6 +1,6 @@
 /**
  * @file Cart Screen
- * @author Nitin Patel & Krutik Parikh
+ * @author Nitin Patel
  */
 
 import React, { } from 'react';

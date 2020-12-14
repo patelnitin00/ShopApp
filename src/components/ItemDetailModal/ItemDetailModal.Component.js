@@ -2,7 +2,6 @@
  * @file Item Detail Modal component where all the list items are displays
  * @author Krutik Parikh
  */
-
 import React, { } from 'react';
 import { View, Text, Image } from 'react-native';
 import Modal from 'react-native-modal';
@@ -11,7 +10,6 @@ import Button from '../Button/Button.component'
 import { useDispatch } from 'react-redux'
 import { addItemToCart } from '../../Redux/Actions/MyCart'
 import { addItemToWishList } from '../../Redux/Actions/WishList'
-
 /**
  * Item Component Module
  * @module ComponentItemDetail
@@ -26,8 +24,6 @@ import { addItemToWishList } from '../../Redux/Actions/WishList'
  * @property {string} inStock - Item InStock
  * @property {string} category - Item Category
  */
-
-
 /**
  * Item Detail component where we click on any list item and this component popups
  * @param {boolean} isVisible - Visibility passed as props 
